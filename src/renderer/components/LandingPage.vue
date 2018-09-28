@@ -25,6 +25,7 @@
           <button class="alt" @click="open('https://vuejs.org/v2/guide/')">Vue.js</button>
         </div>
       </div>
+      <router-link :to="{path: '/main'}">Let's Go!</router-link>
     </main>
   </div>
 </template>
