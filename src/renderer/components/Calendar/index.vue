@@ -1,11 +1,13 @@
 <template>
-  <div id='calendar'></div>
+  <div id='calendar'>
+    <auth />
+  </div>
 </template>
 
 <script>
-import $ from 'jquery'
 import 'fullcalendar'
-
+import $ from 'jquery'
+import Auth from './GoogleApi/Auth'
 export default {
   name: 'calendar',
   mounted () {
@@ -34,6 +36,9 @@ export default {
       }
     })
     window.Fcalendar = $('#calendar').fullCalendar('getCalendar')
+  },
+  components: {
+    Auth
   }
 
 }
@@ -52,6 +57,6 @@ export default {
   }
 }
 .fc-today{
-   background: rgba(215, 240, 247, 0.6);
+    background: rgba(215, 240, 247, 0.6);
 }
 </style>

@@ -27,6 +27,7 @@ function createWindow () {
   })
 
   mainWindow.setBounds(screen.getAllDisplays()[0].bounds)
+  mainWindow.setIgnoreMouseEvents(true, {forward: true})
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {

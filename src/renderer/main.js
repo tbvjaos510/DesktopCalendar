@@ -15,12 +15,21 @@ import Vuikit from 'vuikit'
 import VuikitIcons from '@vuikit/icons'
 import '@vuikit/theme/dist/vuikit.min.css'
 
+// JQuery
+// import $ from 'jquery'
+// window.$ = global.$ = $
+
+// Vue-jquery
+// import vuejquery from 'vue-jquery'
+
 // Dayspan-vuetify 사용
 // import DaySpanVuetify from 'dayspan-vuetify'
 
 // Vue-Fullcalendar 사용
 // import fullCalendar from 'vue-full-calendar'
 // Vue.use(fullCalendar)
+
+// Vue.use(vuejquery)
 
 Vue.use(Vuikit)
 Vue.use(VuikitIcons)
