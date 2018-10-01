@@ -7,13 +7,13 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'landing-page',
+    //   component: require('@/components/LandingPage').default
+    // },
     {
       path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
-    },
-    {
-      path: '/main',
       name: 'Main-page',
       component: require('@/components/Main').default
     },

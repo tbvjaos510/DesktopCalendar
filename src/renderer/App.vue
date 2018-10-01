@@ -7,10 +7,10 @@
 <script>
 import $ from 'jquery'
 var win = require('electron').remote.getCurrentWindow()
-$(document).on('mouseover', 'button, a, input', function () {
+$(document).on('mouseenter', 'button, a, input, .gcal-body', function () {
   win.setIgnoreMouseEvents(false)
 })
-$(document).on('mouseleave', 'button, a, input', function () {
+$(document).on('mouseleave', 'button, a, input, .gcal-body', function () {
   win.setIgnoreMouseEvents(true, { forward: true })
 })
 export default {

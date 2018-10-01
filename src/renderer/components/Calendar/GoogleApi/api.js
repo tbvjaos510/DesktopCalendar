@@ -1,15 +1,108 @@
 // import google api
-import { google } from "googleapis"
-const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
-import credential from '../../../../private/credentials.json'
-import storage from 'electron-json-storage'
+import { google } from 'googleapis'
+import credentials from '@/private/credentials.json'
+import fs from 'fs'
+// import 'google-auth-library'
+import { remote } from 'electron'
+// import { OAuth2Client } from 'google-auth-library'
 
-var oAuth2Client
-function authorize(credentials, callback) {
-  const { client_secret, client_id, redirect_urls } = credentials.installed
-  oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_urls[0]);
-  storage.get('auth', (err, token) => {
-    if (err) return ; // TODO: 새 토큰 발급 및 저장
-    
+const TOKEN_PATH = './token.json'
+const SCOPES = ['https://www.googleapis.com/auth/calendar']
+var APIKEY = null
+let Popup
+/**
+  * code로 토큰을 만듭니다.
+  * @param {string} code 코드
+  */
+function createToken (client, code, callback) {
+  client.getToken(code, (err, token) => {
+    if (err) return console.error('Error Create Token', err)
+    client.setCredentials(token)
+    fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+      if (err) return console.error(err)
+      console.log('token success stored')
+      APIKEY = token.access_token
+      callback(APIKEY)
+    })
   })
+}
+
+/**
+   * 토큰을 발급합니다.
+   */
+function getAccessToken (client, callback) {
+  const authUrl = client.generateAuthUrl({
+    access_type: 'offline',
+    scope: SCOPES
+  })
+  console.log('Auth in authUrl', authUrl)
+  Popup = new remote.BrowserWindow({transparent: false, frame: true})
+  Popup.setIgnoreMouseEvents(false)
+  Popup.setMenuBarVisibility(false)
+  Popup.loadURL(authUrl)
+  window.Popup = Popup
+  Popup.on('closed', () => {
+    Popup = null
+  })
+  Popup.on('page-title-updated', (e, t) => {
+    if (t.indexOf('Success code=') !== -1) {
+      createToken(client, t.split('Success code=')[1], callback)
+      Popup.close()
+    }
+  })
+}
+function RefreshToken (client, callback) {
+  client.refreshAccessToken((err, data) => {
+    if (err) return console.error(err)
+    fs.writeFile(TOKEN_PATH, JSON.stringify(data), (err) => {
+      if (err) return console.error(err)
+      APIKEY = data.access_token
+      if (callback) callback(APIKEY)
+    })
+  })
+}
+var axios
+export default {
+/**
+ * Create an OAuth2 client with the given credentials, and then execute the
+ * given callback function.
+ * @param {function} callback The callback to call with the authorized client.
+ */
+  authorize (callback) {
+    const {clientsecret, clientid, redirecturis} = credentials.installed
+    const oAuth2Client = new google.auth.OAuth2(clientid, clientsecret, redirecturis[0])
+    // Check if we have previously stored a token.
+    fs.readFile(TOKEN_PATH, (err, token) => {
+      if (err || !token) return getAccessToken(oAuth2Client, callback)
+      token = JSON.parse(token)
+      oAuth2Client.setCredentials(token)
+      APIKEY = token.access_token
+      setInterval(RefreshToken.bind(null, oAuth2Client), 3000000)
+      if (token.expiry_date <= new Date()) {
+        RefreshToken(oAuth2Client, callback)
+      } else callback(APIKEY)
+    })
+  },
+  setAxios (axi) {
+    axios = axi
+  },
+  APIKEY () {
+    return APIKEY
+  },
+  request (url, callback) {
+    axios.get(url)
+      .then(callback)
+      .catch((err) => {
+        if (err) callback(null)
+      })
+  },
+  colors (callback) {
+    this.request('https://www.googleapis.com/calendar/v3/colors', callback)
+  },
+  calendarList (callback) {
+    this.request('https://www.googleapis.com/calendar/v3/users/me/calendarList?showHidden=true', callback)
+  },
+  events (id, start, end, callback) {
+    this.request(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events?timeMin=${start.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}&timeMax=${end.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}`, callback)
+  }
 }
