@@ -24,12 +24,14 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     transparent: true,
     frame: false,
-    skipTaskbar: true,
-    focusable: false
+    skipTaskbar: true
   })
   mainWindow.setBounds(screen.getAllDisplays()[0].bounds)
   mainWindow.setIgnoreMouseEvents(true, {forward: true})
   mainWindow.loadURL(winURL)
+  mainWindow.on('blur', () => {
+    mainWindow.setIgnoreMouseEvents(true, {forward: true})
+  })
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -37,7 +39,7 @@ function createWindow () {
 
 app.on('ready', createWindow)
 app.on('ready', () => {
-  tray = new Tray(__static + '/icon.png')
+  tray = new Tray(__static + '/icon.ico')
   tray.setToolTip('DeskTop Calendar')
   const contextMenu = Menu.buildFromTemplate([
     {

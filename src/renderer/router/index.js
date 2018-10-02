@@ -14,8 +14,13 @@ export default new Router({
     // },
     {
       path: '/',
-      name: 'Main-page',
-      component: require('@/components/Main').default
+      name: 'MainPage',
+      component: require('@/views/Main').default
+    },
+    {
+      path: '/setting',
+      name: 'SettingPage',
+      component: require('@/views/Setting').default
     },
     {
       path: '*',

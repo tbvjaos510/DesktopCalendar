@@ -1,8 +1,16 @@
 <template>
   <div id='calendar'>
     <div class="uk-button-group calendar-head-left"> 
-      <vk-button type="primary" class="uk-button-small" @click="reloadEvent" id="reload-btn">새로고침</vk-button>
-      <vk-button type="primary" class="uk-button-small"><vk-icon icon="calendar" title="Google Calendar 열기" @click="$bus.emit('loadURL', 'https://calendar.google.com/')"/></vk-button>
+      <vk-button type="primary" class="uk-button-small" @click="reloadEvent" v-vk-tooltip="'새로고침'" id="reload-btn">새로고침</vk-button>
+      <vk-button type="primary" class="uk-button-small">
+        <vk-icon icon="calendar" v-vk-tooltip="'Google Calendar 열기'" @click="$bus.emit('loadURL', 'https://calendar.google.com/')"/>
+      </vk-button>
+      <vk-button type="primary" class="uk-button-small" v-vk-tooltip="'설정을 엽니다.'" @click="loadSetting" >
+        <vk-icon icon="settings"/>
+      </vk-button>
+      <vk-button type="primary" class="uk-button-small" v-vk-tooltip="'Calendar을 움직입니다.'">
+        <vk-icon icon="move" style="-webkit-app-region: drag;" ></vk-icon>
+      </vk-button>
     </div>
     <div class="uk-button-group calendar-head-right">
       <vk-button type="primary" class="uk-button-small" @click="Fcalendar.prev();reloadEvent();"><vk-icon icon="chevron-left"/></vk-button>
@@ -17,6 +25,8 @@
 import 'fullcalendar'
 import $ from 'jquery'
 import events from './GoogleApi/event'
+const remote = require('electron').remote
+const { BrowserWindow } = remote
 export default {
   name: 'calendar',
   data () {
@@ -33,6 +43,30 @@ export default {
         $('#reload-btn').prop('disabled', false)
       })
       this.$bus.$emit('forceReload')
+    },
+    loadSetting (refreshBtn) {
+      console.log(refreshBtn)
+      let settingWindow = new BrowserWindow({
+        parent: remote.getCurrentWindow(),
+        frame: true,
+        focusable: true,
+        title: 'Desktop Calendar 설정',
+        skipTaskbar: false
+      })
+      refreshBtn.target.disabled = true
+      settingWindow.setIgnoreMouseEvents(false)
+      settingWindow.setMenu(null)
+      settingWindow.webContents.openDevTools({
+        mode: 'undocked'
+      })
+      settingWindow.loadURL(location.origin + '?mode=setting')
+      settingWindow.webContents.on('did-finish-load', () => {
+        settingWindow.webContents.send('init-options', (this.$store.getters.getAll))
+      })
+      settingWindow.on('close', (e) => {
+        refreshBtn.target.disabled = false
+        settingWindow = null
+      })
     }
   },
   mounted () {
@@ -85,6 +119,7 @@ export default {
 
 <style lang="scss">
 @import url('lib/fullcalendar.css');
+// @import url('lib/calendarTheme.scss');
 
 $side-margin: 20%;
 #calendar{
@@ -93,7 +128,6 @@ $side-margin: 20%;
   background-clip: content-box;
   height: 700px;
   .fc-view-container{
-    // color:black;
     background: rgba(255, 255, 255, 0.4);
   }
 }
