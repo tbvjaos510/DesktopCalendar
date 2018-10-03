@@ -13,7 +13,7 @@
       <p class="uk-text-meta uk-margin-remove" v-if="timeShow" @mouseout="timeShow=false"><time>{{event.start?event.start.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
       <p class="uk-text-meta uk-margin-remove" v-if="timeShow"><time>~{{event.end?event.end.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
     </div>
-    <p class="gcal-body" v-html="event.description" v-linkified />
+    <p class="gcal-body" v-html="getDescription" />
   </vk-card>
 </template>
 
@@ -39,7 +39,7 @@ export default {
           title: e.summary,
           start: e.start.dateTime || e.start.date,
           end: e.end.dateTime || e.end.date,
-          color: color.background,
+          color: (e.colorId ? this.gcolor.event[e.colorId].background : color.background),
           organizer: e.organizer,
           description: e.description || null,
           created: e.created
@@ -66,6 +66,7 @@ export default {
         this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + key
         api.colors((res) => {
           this.gcolor = res.data
+          console.log(res.data)
           api.calendarList((res) => {
             const calendars = res.data.items
             this.Fcalendar.removeEvents()
@@ -73,6 +74,7 @@ export default {
               colors[cal.id] = this.gcolor.calendar[cal.colorId]
               api.events(cal.id, this.Fcalendar.view.start, this.Fcalendar.view.end, (events) => {
                 if (!events) return console.log('not found')
+                console.log(events.data.items)
                 this.addEvent(events.data.items, colors[cal.id])
               })
             }
@@ -109,6 +111,11 @@ export default {
     this.$bus.$on('loadURL', (url) => {
       this.openExternal(url)
     })
+  },
+  computed: {
+    getDescription () {
+      return this.event.description && this.event.description.replace('&lt;', '<').replace('&gt;', '>')
+    }
   },
   props: ['Fcalendar', 'event']
 }

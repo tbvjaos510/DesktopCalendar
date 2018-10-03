@@ -1,10 +1,6 @@
 <template>
   <div>
     <timer />
-    <select class="uk-select uk-width-small uk-position-large uk-position-top-right">
-      <option value="1">1</option>
-      <option value="2">2</option>  
-    </select>
     <calendar />
   </div>
 </template>

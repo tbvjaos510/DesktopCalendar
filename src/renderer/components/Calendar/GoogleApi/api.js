@@ -36,7 +36,7 @@ function getAccessToken (client, callback) {
     scope: SCOPES
   })
   console.log('Auth in authUrl', authUrl)
-  Popup = new remote.BrowserWindow({transparent: false, frame: true})
+  Popup = new remote.BrowserWindow({ transparent: false, frame: true })
   Popup.setIgnoreMouseEvents(false)
   Popup.setMenuBarVisibility(false)
   Popup.loadURL(authUrl)
@@ -69,7 +69,7 @@ export default {
  * @param {function} callback The callback to call with the authorized client.
  */
   authorize (callback) {
-    const {clientsecret, clientid, redirecturis} = credentials.installed
+    const { clientsecret, clientid, redirecturis } = credentials.installed
     const oAuth2Client = new google.auth.OAuth2(clientid, clientsecret, redirecturis[0])
     // Check if we have previously stored a token.
     fs.readFile(TOKEN_PATH, (err, token) => {

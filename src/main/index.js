@@ -27,10 +27,10 @@ function createWindow () {
     skipTaskbar: true
   })
   mainWindow.setBounds(screen.getAllDisplays()[0].bounds)
-  mainWindow.setIgnoreMouseEvents(true, {forward: true})
+  mainWindow.setIgnoreMouseEvents(true, { forward: true })
   mainWindow.loadURL(winURL)
   mainWindow.on('blur', () => {
-    mainWindow.setIgnoreMouseEvents(true, {forward: true})
+    mainWindow.setIgnoreMouseEvents(true, { forward: true })
   })
   mainWindow.on('closed', () => {
     mainWindow = null
