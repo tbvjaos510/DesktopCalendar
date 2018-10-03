@@ -39,7 +39,7 @@ function createWindow () {
 
 app.on('ready', createWindow)
 app.on('ready', () => {
-  tray = new Tray(__static + '/icon.ico')
+  tray = new Tray(__static + '/icon.png')
   tray.setToolTip('DeskTop Calendar')
   const contextMenu = Menu.buildFromTemplate([
     {

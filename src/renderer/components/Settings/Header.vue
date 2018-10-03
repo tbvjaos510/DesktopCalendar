@@ -1,7 +1,7 @@
 <template>
   <vk-sticky>
     <vk-card class="setting-header" type="default" padding="small">
-      <img src="static/icon.ico" alt="Desktop Calendar" id="main-icon">
+      <img src="static/icon.png" alt="Desktop Calendar" id="main-icon">
       <span class="uk-h3">Desktop Calendar 설정</span> 
     </vk-card>
   </vk-sticky>
