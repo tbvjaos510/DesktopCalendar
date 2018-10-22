@@ -15,9 +15,35 @@ import VueBus from 'vue-bus'
 // Vue-linkify 사용
 import linkify from 'vue-linkify'
 
+// DatePicker locale 설정
+import { Settings } from 'luxon'
+
+import Datetime from 'vue-datetime'
+// You need a specific loader for CSS files
+import 'vue-datetime/dist/vue-datetime.css'
+
+// jQuery 사용
+import $ from 'jquery'
+window.$ = $
+
+// datepicker Locale 설정
+Settings.defaultLocale = 'ko'
+
+// CurrentWindow 사용
+var win = require('electron').remote.getCurrentWindow()
+
+window.enableMouse = function (e) {
+  win.setIgnoreMouseEvents(false)
+}
+window.disableMouse = function (e) {
+  const pos = e.currentTarget.getBoundingClientRect()
+  if ((e.clientX > pos.left && e.clientY > pos.top) && (e.clientX < pos.left + pos.width && e.clientY < pos.top + pos.height)) return true
+  win.setIgnoreMouseEvents(true, { forward: true })
+}
 Vue.use(Vuikit)
 Vue.use(VuikitIcons)
 Vue.use(VueBus)
+Vue.use(Datetime)
 
 Vue.directive('linkified', linkify)
 

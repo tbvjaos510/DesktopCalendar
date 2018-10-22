@@ -5,35 +5,54 @@
       <vk-button type="primary" class="uk-button-small">
         <vk-icon icon="calendar" v-vk-tooltip="'Google Calendar 열기'" @click="$bus.emit('loadURL', 'https://calendar.google.com/')"/>
       </vk-button>
-      <vk-button type="primary" class="uk-button-small" v-vk-tooltip="'설정을 엽니다.'" @click="loadSetting" >
+      <vk-button type="primary" class="uk-button-small" v-vk-tooltip="'설정을 엽니다.'" id="createOption" @click="loadSetting" >
         <vk-icon icon="settings"/>
       </vk-button>
+      <vk-button type="primary" class="uk-button-small" v-vk-tooltip="'Event 추가'" @click="showAdd = true">
+        <vk-icon icon="plus" />
+      </vk-button>
+      <vk-drop mode="click">
+        <vk-card padding="small" class="event-add">
+          <fieldset class="uk-fieldset">
+            <input type="text" placeholder="제목 입력" class="uk-input">
+            <p class="uk-margin-top">
+              시작
+              <datetime type="datetime" input-class="uk-width" use12-hour="true"/>
+              <!-- <input type="datetime-local" :value="new Date().toISOString().split('.')[0]"> -->
+            </p>
+          </fieldset>
+        </vk-card>
+      </vk-drop>
       <vk-button type="primary" class="uk-button-small" v-vk-tooltip="'Calendar을 움직입니다.'">
         <vk-icon icon="move" style="-webkit-app-region: drag;" ></vk-icon>
       </vk-button>
     </div>
+    
     <div class="uk-button-group calendar-head-right">
       <vk-button type="primary" class="uk-button-small" @click="Fcalendar.prev();reloadEvent();"><vk-icon icon="chevron-left"/></vk-button>
       <vk-button type="primary" class="uk-button-small" @click="Fcalendar.today();reloadEvent();"><vk-icon icon="clock"/></vk-button>
       <vk-button type="primary" class="uk-button-small" @click="Fcalendar.next();reloadEvent();"><vk-icon icon="chevron-right"/></vk-button>
     </div>
-    <events v-show="show" :Fcalendar="Fcalendar" :event="eventValue"/>
+    <events v-show="show" :Fcalendar="Fcalendar" :event="eventValue" :show="show"/>
   </div>
 </template>
 
 <script>
-import 'fullcalendar'
-import $ from 'jquery'
+import { moment } from 'fullcalendar'
 import events from './GoogleApi/event'
 const remote = require('electron').remote
 const { BrowserWindow } = remote
+const $ = window.$
+window.moment = moment
 export default {
   name: 'calendar',
   data () {
     return {
       Fcalendar: null,
       show: false,
-      eventValue: {}
+      eventValue: {},
+      notifys: [],
+      showAdd: false
     }
   },
   methods: {
@@ -45,26 +64,31 @@ export default {
       this.$bus.$emit('forceReload')
     },
     loadSetting (refreshBtn) {
-      console.log(refreshBtn)
+      $('#createOption').prop('disabled', true)
+      const mainPath = process.env.NODE_ENV === 'development'
+        ? `http://localhost:9080`
+        : `file://${__dirname}/index.html`
       let settingWindow = new BrowserWindow({
         parent: remote.getCurrentWindow(),
         frame: true,
         focusable: true,
         title: 'Desktop Calendar 설정',
-        skipTaskbar: false
+        skipTaskbar: false,
+        webPreferences: { webSecurity: false },
+        show: false
       })
-      refreshBtn.target.disabled = true
       settingWindow.setIgnoreMouseEvents(false)
       settingWindow.setMenu(null)
       settingWindow.webContents.openDevTools({
         mode: 'undocked'
       })
-      settingWindow.loadURL(location.origin + '?mode=setting')
-      settingWindow.webContents.on('did-finish-load', () => {
+      settingWindow.loadURL(mainPath)
+      settingWindow.webContents.once('did-finish-load', () => {
+        settingWindow.webContents.send('setting')
         settingWindow.webContents.send('init-options', (this.$store.getters.getAll))
       })
       settingWindow.on('close', (e) => {
-        refreshBtn.target.disabled = false
+        $('#createOption').prop('disabled', false)
         settingWindow = null
       })
     }
@@ -143,5 +167,9 @@ $side-margin: 20%;
 .calendar-head-right {
   @extend .calendar-head-left;
   right: $side-margin;
+}
+
+.event-add {
+  
 }
 </style>

@@ -3,7 +3,7 @@
     <div slot="header" style="padding: 0">
      <vk-icon-link id="open-google-calendar" icon="google" 
      class="uk-position-top-right uk-padding-small uk-border-circle google-button" 
-     title="Google Calendar에서 엽니다." v-on:click="openGCal()"/>
+    v-vk-tooltip="'Google Calendar에서 엽니다.'" v-on:click="openGCal()"/>
       <vk-card-title class="uk-margin-small-top gcal-title">{{event.title}}</vk-card-title>
       <p class="uk-text-meta uk-margin-remove" @mouseover="timeShow=true" @mouseout="timeShow=false" v-if="!timeShow">
         <vk-icon v-if="timePast" icon="history"></vk-icon>
@@ -13,7 +13,12 @@
       <p class="uk-text-meta uk-margin-remove" v-if="timeShow" @mouseout="timeShow=false"><time>{{event.start?event.start.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
       <p class="uk-text-meta uk-margin-remove" v-if="timeShow"><time>~{{event.end?event.end.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
     </div>
-    <p class="gcal-body" v-html="getDescription" />
+    <vk-icon-link v-if="!isDelete" icon="trash" class="uk-float-right" v-vk-tooltip="'이벤트 삭제'" @click="deleteEvent"></vk-icon-link>
+    <vk-spinner v-else ratio=0.7 class="uk-float-right"></vk-spinner>
+    <div v-if="deleteError" class="uk-alert uk-alert-danger uk-padding-small" uk-alert>
+      <p>삭제에 실패하였습니다.</p>
+    </div>
+    <p class="gcal-body" v-html="getDescription" v-linkified/>
   </vk-card>
 </template>
 
@@ -27,7 +32,9 @@ export default {
     return {
       gcolor: null,
       timeShow: false,
-      timePast: false
+      timePast: false,
+      isDelete: false,
+      deleteError: false
     }
   },
   methods: {
@@ -46,11 +53,6 @@ export default {
         }
       })
       this.Fcalendar.renderEvents(data)
-    },
-    getSunday (now) {
-      now.setDate((now.getDate() - now.getDay()))
-      now.setHours(0, 0, 0, 0)
-      return now
     },
     openGCal () {
       this.openExternal(this.event.e.htmlLink)
@@ -74,7 +76,6 @@ export default {
               colors[cal.id] = this.gcolor.calendar[cal.colorId]
               api.events(cal.id, this.Fcalendar.view.start, this.Fcalendar.view.end, (events) => {
                 if (!events) return console.log('not found')
-                console.log(events.data.items)
                 this.addEvent(events.data.items, colors[cal.id])
               })
             }
@@ -104,6 +105,21 @@ export default {
         this.timePast = true
         return end.locale('ko').fromNow() + '에 종료됨'
       }
+    },
+    deleteEvent () {
+      this.isDelete = true
+      api.deleteEvent(this.event.organizer.email, this.event.id, (req) => {
+        this.isDelete = false
+        if (req && req.status === 204) {
+          this.$parent.show = false
+          this.Fcalendar.removeEvents(this.event.id)
+        } else {
+          this.deleteError = true
+          setTimeout(() => {
+            this.deleteError = false
+          }, 2000)
+        }
+      })
     }
   },
   mounted () {

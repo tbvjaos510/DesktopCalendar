@@ -7,7 +7,7 @@ import { remote } from 'electron'
 // import { OAuth2Client } from 'google-auth-library'
 
 const TOKEN_PATH = './token.json'
-const SCOPES = ['https://www.googleapis.com/auth/calendar']
+const SCOPES = ['https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events']
 var APIKEY = null
 let Popup
 /**
@@ -104,5 +104,16 @@ export default {
   },
   events (id, start, end, callback) {
     this.request(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events?timeMin=${start.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}&timeMax=${end.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}`, callback)
+  },
+  deleteEvent (oid, id, cb) {
+    console.log(oid, id)
+    axios.delete(`https://www.googleapis.com/calendar/v3/calendars/${oid}/events/${id}`)
+      .then((req) => {
+        cb(req)
+      })
+      .catch((err) => {
+        console.log(err)
+        cb(null)
+      })
   }
 }
