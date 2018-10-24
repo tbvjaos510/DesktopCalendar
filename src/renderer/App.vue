@@ -11,8 +11,8 @@ export default {
   mounted () {
     const $ = window.$
     ipcRenderer.on('setting', () => {
-      $(document).off('mouseenter', 'button, a, .gcal-body, .event-add', window.enableMouse)
-      $(document).off('mouseleave', 'button, a, .gcal-body, .event-add', window.disableMouse)
+      $(document).off('mouseenter', 'button, a, .gcal-body, .event-add, .timeShow', window.enableMouse)
+      $(document).off('mouseleave', 'button, a, .gcal-body, .event-add, .timeShow', window.disableMouse)
       this.$router.push('setting')
       remote.BrowserWindow.getFocusedWindow().show()
     })

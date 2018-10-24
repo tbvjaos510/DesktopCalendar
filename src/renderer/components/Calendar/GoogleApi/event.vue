@@ -5,13 +5,13 @@
      class="uk-position-top-right uk-padding-small uk-border-circle google-button" 
     v-vk-tooltip="'Google Calendar에서 엽니다.'" v-on:click="openGCal()"/>
       <vk-card-title class="uk-margin-small-top gcal-title">{{event.title}}</vk-card-title>
-      <p class="uk-text-meta uk-margin-remove" @mouseover="timeShow=true" @mouseout="timeShow=false" v-if="!timeShow">
+      <p class="uk-text-meta uk-margin-remove timeShow" v-vk-tooltip="'클릭으로 보기 변경'" @click="timeShow=true" v-if="!timeShow">
         <vk-icon v-if="timePast" icon="history"></vk-icon>
         <vk-icon v-else icon="future"></vk-icon>
         <time>{{getFromNow()}}</time>
       </p>
-      <p class="uk-text-meta uk-margin-remove" v-if="timeShow" @mouseout="timeShow=false"><time>{{event.start?event.start.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
-      <p class="uk-text-meta uk-margin-remove" v-if="timeShow"><time>~{{event.end?event.end.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
+      <p class="uk-text-meta uk-margin-remove timeShow" v-vk-tooltip="'클릭으로 보기 변경'" v-if="timeShow" @click="timeShow = false"><time>{{event.start?event.start.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
+      <p class="uk-text-meta uk-margin-remove timeShow" v-vk-tooltip="'클릭으로 보기 변경'" v-if="timeShow" @click="timeShow = false"><time>~ {{event.end?event.end.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
     </div>
     <vk-icon-link v-if="!isDelete" icon="trash" class="uk-float-right" v-vk-tooltip="'이벤트 삭제'" @click="deleteEvent"></vk-icon-link>
     <vk-spinner v-else ratio=0.7 class="uk-float-right"></vk-spinner>
@@ -95,7 +95,7 @@ export default {
       const now = new Date()
       now.setHours(now.getHours() + 9)
       if (!start) return ''
-      if (start.diff(now) > 0) {
+      if (start.diff(now) > 0 || !end) {
         this.timePast = false
         return start.locale('ko').fromNow() + '에 시작'
       } else if (end.diff(now) > 0) {
@@ -118,6 +118,14 @@ export default {
           setTimeout(() => {
             this.deleteError = false
           }, 2000)
+        }
+      })
+    },
+    insertEvent (timeType, start, end, title, content, colorid, cb) {
+      api.insertEvent(timeType, start, end, title, content, colorid, (req) => {
+        if (req) {
+          this.addEvent([req], { background: '#FFFFFF' })
+          cb(req)
         }
       })
     }
@@ -151,7 +159,7 @@ export default {
   background:lightgray;
 }
 .google-button {
-  border-radius: 10px;
+  border-radius: 30px;
 }
 .gcal-body {
   word-wrap: break-word;

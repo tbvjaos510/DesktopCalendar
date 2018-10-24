@@ -115,5 +115,35 @@ export default {
         console.log(err)
         cb(null)
       })
+  },
+  insertEvent (timeType, start, end, title, content, colorid, cb) {
+    let sendObject = {
+      summary: title,
+      description: content,
+      colorId: colorid
+    }
+    if (!timeType) {
+      sendObject.start = {
+        dateTime: start
+      }
+      sendObject.end = {
+        dateTime: end
+      }
+    } else {
+      sendObject.start = {
+        date: start.split('T')[0]
+      }
+      sendObject.end = {
+        date: end.split('T')[0]
+      }
+    }
+    axios.post(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, sendObject)
+      .then((req) => {
+        cb(req.data)
+      })
+      .catch((err) => {
+        console.log(err)
+        cb(null, err)
+      })
   }
 }

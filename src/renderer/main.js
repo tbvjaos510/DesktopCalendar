@@ -36,8 +36,10 @@ window.enableMouse = function (e) {
   win.setIgnoreMouseEvents(false)
 }
 window.disableMouse = function (e) {
-  const pos = e.currentTarget.getBoundingClientRect()
-  if ((e.clientX > pos.left && e.clientY > pos.top) && (e.clientX < pos.left + pos.width && e.clientY < pos.top + pos.height)) return true
+  if (e) {
+    const pos = e.currentTarget.getBoundingClientRect()
+    if ((e.clientX > pos.left && e.clientY > pos.top) && (e.clientX < pos.left + pos.width && e.clientY < pos.top + pos.height)) return true
+  }
   win.setIgnoreMouseEvents(true, { forward: true })
 }
 Vue.use(Vuikit)

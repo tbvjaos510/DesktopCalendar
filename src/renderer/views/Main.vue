@@ -20,8 +20,8 @@ export default {
     ipcRenderer.on('setOption', (event, message) => {
       this.$store.commit('setOptions', message)
     })
-    $(document).on('mouseenter', 'button, a, .gcal-body, .event-add', window.enableMouse)
-    $(document).on('mouseleave', 'button, a, .gcal-body, .event-add', window.disableMouse)
+    $(document).on('mouseenter', 'button, a, .gcal-body, .event-add, .timeShow', window.enableMouse)
+    $(document).on('mouseleave', 'button, a, .gcal-body, .event-add, .timeShow', window.disableMouse)
   }
 }
 </script>
