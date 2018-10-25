@@ -154,9 +154,9 @@ export default {
       })
       settingWindow.setIgnoreMouseEvents(false)
       settingWindow.setMenu(null)
-      settingWindow.webContents.openDevTools({
-        mode: 'undocked'
-      })
+      // settingWindow.webContents.openDevTools({
+      //   mode: 'undocked'
+      // })
       settingWindow.loadURL(mainPath)
       settingWindow.webContents.once('did-finish-load', () => {
         settingWindow.webContents.send('init-options', (this.$store.getters.getAll))

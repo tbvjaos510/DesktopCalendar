@@ -1,6 +1,6 @@
 {
   "name": "desktop-calendar",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "tbvjaos510 <tbvjaos510@naver.com>",
   "description": "electron-vue(vikit)으로 제작한 desktop calendar",
   "license": null,
