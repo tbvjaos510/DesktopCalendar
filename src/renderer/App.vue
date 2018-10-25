@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import {ipcRenderer, remote} from 'electron'
 export default {
   name: 'desktop-calendar',
   mounted () {
