@@ -18,7 +18,8 @@
             <input type='text' placeholder='제목 입력' class='uk-input' v-model='summary'>
             <p class='uk-margin-small-top'>
               설명
-              <textarea class='uk-textarea uk-resize-vertical uk-height-max-medium' v-model='description'/>
+              <textarea class='uk-textarea uk-height-small uk-resize-vertical uk-height-max-medium' v-model='description'/>
+              <a class="uk-text-muted uk-float-right uk-text-small" @click="$bus.emit('loadURL', 'https://gist.github.com/ihoneymon/652be052a0727ad59601#2-%EB%A7%88%ED%81%AC%EB%8B%A4%EC%9A%B4-%EC%82%AC%EC%9A%A9%EB%B2%95%EB%AC%B8%EB%B2%95')">Markdown 형식</a>
             </p>
             <p class='uk-margin-small-top'>
               시간 종류 <select class="uk-select uk-width-1-3 uk-form-small" v-model="timeType">
@@ -61,9 +62,11 @@
 <script>
 import { moment } from 'fullcalendar'
 import events from './GoogleApi/event'
+const Showdown = require('showdown')
 const remote = require('electron').remote
 const { BrowserWindow } = remote
 const $ = window.$
+const converter = new Showdown.Converter()
 window.moment = moment
 export default {
   name: 'calendar',
@@ -139,16 +142,15 @@ export default {
     loadSetting (refreshBtn) {
       $('#createOption').prop('disabled', true)
       const mainPath = process.env.NODE_ENV === 'development'
-        ? `http://localhost:9080`
-        : `file://${__dirname}/index.html`
+        ? `http://localhost:9080/#/setting`
+        : `file://${__dirname}/index.html#setting`
       let settingWindow = new BrowserWindow({
         parent: remote.getCurrentWindow(),
         frame: true,
         focusable: true,
         title: 'Desktop Calendar 설정',
         skipTaskbar: false,
-        webPreferences: { webSecurity: false },
-        show: false
+        webPreferences: { webSecurity: false }
       })
       settingWindow.setIgnoreMouseEvents(false)
       settingWindow.setMenu(null)
@@ -157,7 +159,6 @@ export default {
       })
       settingWindow.loadURL(mainPath)
       settingWindow.webContents.once('did-finish-load', () => {
-        settingWindow.webContents.send('setting')
         settingWindow.webContents.send('init-options', (this.$store.getters.getAll))
       })
       settingWindow.on('close', (e) => {
@@ -166,7 +167,9 @@ export default {
       })
     },
     insertEvent (e) {
-      this.$refs.eventform.insertEvent(this.timeType === '날짜', this.startTime, this.endTime, this.summary, this.description, this.colorid + 1, (e) => {
+      let resultHtml = converter.makeHtml(this.description)
+      console.log(resultHtml)
+      this.$refs.eventform.insertEvent(this.timeType === '날짜', this.startTime, this.endTime, this.summary, resultHtml, this.colorid + 1, (e) => {
         console.log(e)
       })
       this.startTime = this.endTime = this.summary = this.description = ''
@@ -203,11 +206,14 @@ export default {
         event.left = jsevent.currentTarget.getBoundingClientRect().left
         this.eventValue = event
         this.show = true
+        console.log(event)
       },
       eventMouseout: (event, jsevent) => {
         this.show = false
       },
-      timeFormat: 'AH:mm'
+      timeFormat: 'AH:mm',
+      dayPopoverFormat: 'MM월 DD일 dddd',
+      eventLimitText: '더보기'
     })
     window.Fcalendar = this.Fcalendar = $('#calendar').fullCalendar('getCalendar')
     $('#gcal-event').on('mouseover', () => {
@@ -235,6 +241,8 @@ export default {
 
 <style lang='scss'>
 @import url('lib/fullcalendar.css');
+// Use Github Markdown Style Sheet
+@import url('lib/github-markdown.css');
 // @import url('lib/calendarTheme.scss');
 
 $side-margin: 20%;
@@ -286,5 +294,7 @@ $side-margin: 20%;
 .fc-content {
   // white-space: normal !important;
 }
-
+.fc-more-popover {
+  background:white;
+}
 </style>

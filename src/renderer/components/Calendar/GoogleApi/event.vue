@@ -4,21 +4,24 @@
      <vk-icon-link id="open-google-calendar" icon="google" 
      class="uk-position-top-right uk-padding-small uk-border-circle google-button" 
     v-vk-tooltip="'Google Calendar에서 엽니다.'" v-on:click="openGCal()"/>
-      <vk-card-title class="uk-margin-small-top gcal-title">{{event.title}}</vk-card-title>
+      <vk-card-title class="uk-margin-small-top gcal-title uk-margin-remove-bottom">{{event.title}}</vk-card-title>
+      <p class="uk-text-meta uk-margin-remove-top">{{event.organizer ? (event.organizer.displayName || event.organizer.email) : ''}}</p>
       <p class="uk-text-meta uk-margin-remove timeShow" v-vk-tooltip="'클릭으로 보기 변경'" @click="timeShow=true" v-if="!timeShow">
         <vk-icon v-if="timePast" icon="history"></vk-icon>
         <vk-icon v-else icon="future"></vk-icon>
         <time>{{getFromNow()}}</time>
       </p>
-      <p class="uk-text-meta uk-margin-remove timeShow" v-vk-tooltip="'클릭으로 보기 변경'" v-if="timeShow" @click="timeShow = false"><time>{{event.start?event.start.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
-      <p class="uk-text-meta uk-margin-remove timeShow" v-vk-tooltip="'클릭으로 보기 변경'" v-if="timeShow" @click="timeShow = false"><time>~ {{event.end?event.end.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
-    </div>
+      <div v-vk-tooltip="'클릭으로 보기 변경'" v-if="timeShow" @click="timeShow = false">
+        <p class="uk-text-meta uk-margin-remove timeShow"><time>{{event.start?event.start.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
+        <p class="uk-text-meta uk-margin-remove timeShow"><time>~ {{event.end?event.end.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
+      </div>
+       </div>
     <vk-icon-link v-if="!isDelete" icon="trash" class="uk-float-right" v-vk-tooltip="'이벤트 삭제'" @click="deleteEvent"></vk-icon-link>
     <vk-spinner v-else ratio=0.7 class="uk-float-right"></vk-spinner>
     <div v-if="deleteError" class="uk-alert uk-alert-danger uk-padding-small" uk-alert>
       <p>삭제에 실패하였습니다.</p>
     </div>
-    <p class="gcal-body" v-html="getDescription" v-linkified/>
+    <p class="gcal-body markdown-body" v-html="getDescription" v-linkified/>
   </vk-card>
 </template>
 
@@ -34,7 +37,8 @@ export default {
       timeShow: false,
       timePast: false,
       isDelete: false,
-      deleteError: false
+      deleteError: false,
+      isUpdate: false
     }
   },
   methods: {

@@ -139,6 +139,7 @@ export default {
     }
     axios.post(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, sendObject)
       .then((req) => {
+        console.log(req)
         cb(req.data)
       })
       .catch((err) => {
