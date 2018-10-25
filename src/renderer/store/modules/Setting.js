@@ -8,7 +8,7 @@ export default {
         size: '6em'
       },
       calendar: {
-        background: 'rgba(255, 255, 255, 0.4)'
+        background: '#00000066'
       }
     }
   },

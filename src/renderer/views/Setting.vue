@@ -19,7 +19,7 @@ var settings = {
     size: '6em'
   },
   calendar: {
-    background: 'rgba(255, 255, 255, 0.4)'
+    background: '#00000066'
   },
   changeOption (key, value) {
     remote.getCurrentWindow().getParentWindow().webContents.send('setOption', {

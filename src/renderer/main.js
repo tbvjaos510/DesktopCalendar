@@ -46,7 +46,6 @@ Vue.use(Vuikit)
 Vue.use(VuikitIcons)
 Vue.use(VueBus)
 Vue.use(Datetime)
-
 Vue.directive('linkified', linkify)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
@@ -55,7 +54,9 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  components: { App },
+  components: {
+    App
+  },
   router,
   render: h => h(App),
   store,
