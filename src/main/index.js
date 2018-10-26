@@ -39,6 +39,7 @@ function createWindow () {
     console.log('resized')
   })
 }
+app.setAppUserModelId('com.sanghie.dcalendar')
 
 app.on('ready', createWindow)
 app.on('ready', () => {

@@ -19,9 +19,12 @@ var settings = {
     size: '6em'
   },
   calendar: {
-    background: '#00000066'
+    background: '#00000066',
+    color: 'black',
+    buttonType: 'primary'
   },
   changeOption (key, value) {
+    console.log('changed')
     remote.getCurrentWindow().getParentWindow().webContents.send('setOption', {
       key: key,
       value: value

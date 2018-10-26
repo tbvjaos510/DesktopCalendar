@@ -8,7 +8,23 @@ export default {
         size: '6em'
       },
       calendar: {
-        background: '#00000066'
+        background: {
+          rgba: {
+            r: 255,
+            g: 255,
+            b: 255,
+            a: 0.3
+          }
+        },
+        color: {
+          rgba: {
+            r: 0,
+            g: 0,
+            b: 0,
+            a: 1
+          }
+        },
+        buttonType: 'primary'
       }
     }
   },

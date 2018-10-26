@@ -1,14 +1,14 @@
 <template>
   <div id='calendar'>
     <div class='uk-button-group calendar-head-left'> 
-      <vk-button type='primary' class='uk-button-small' @click='reloadEvent' v-vk-tooltip="'새로고침'" id='reload-btn'>새로고침</vk-button>
-      <vk-button type='primary' class='uk-button-small'>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='reloadEvent' v-vk-tooltip="'새로고침'" id='reload-btn'>새로고침</vk-button>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small'>
         <vk-icon icon='calendar' v-vk-tooltip="'Google Calendar 열기'" @click="$bus.emit('loadURL', 'https://calendar.google.com/')"/>
       </vk-button>
-      <vk-button type='primary' class='uk-button-small' v-vk-tooltip="'설정을 엽니다.'" id='createOption' @click='loadSetting' >
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'설정을 엽니다.'" id='createOption' @click='loadSetting' >
         <vk-icon icon='settings'/>
       </vk-button>
-      <vk-button type='primary' class='uk-button-small' v-vk-tooltip="'Event 추가'" @click='showAdd = true'>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'Event 추가'" @click='showAdd = true'>
         <vk-icon icon='plus' />
       </vk-button>
       <vk-drop mode='click'>
@@ -27,8 +27,8 @@
                 <option>날짜-시간</option>
               </select> <br>
               시작
-              <datetime v-model='startTime' v-if="timeType == '날짜'" :phrases="{ok: '확인', cancel: '취소'}" type="date"  input-class='uk-width' :use12-hour='true' @close="ignoreMouse"/>
-              <datetime v-model='startTime' v-else :phrases="{ok: '확인', cancel: '취소'}" type="datetime"  input-class='uk-width' :use12-hour='true' @close="ignoreMouse"/>
+              <datetime v-model='startTime' v-if="timeType == '날짜'" :phrases="{ok: '확인', cancel: '취소'}" type="date"  input-class='uk-width color-input' :use12-hour='true' @close="ignoreMouse"/>
+              <datetime v-model='startTime' v-else :phrases="{ok: '확인', cancel: '취소'}" type="datetime"  input-class='uk-width color-input' :use12-hour='true' @close="ignoreMouse"/>
               
             </p>
             <p class='uk-margin-small-top'>
@@ -41,19 +41,19 @@
                 <vk-icon v-if="colorid == i" ratio="1.3" icon="check" class="icon-custom"/>
               </div>
             </p>
-            <vk-button type='primary' v-vk-tooltip="startTime ? '이벤트를 추가합니다.' : '시작 시간을 정해 주십시오.'" @click='insertEvent' :disabled="!startTime">추가</vk-button>
+            <vk-button :type='getCalendarOption.buttonType' v-vk-tooltip="startTime ? '이벤트를 추가합니다.' : '시작 시간을 정해 주십시오.'" @click='insertEvent' :disabled="!startTime">추가</vk-button>
           </fieldset>
         </vk-card>
       </vk-drop>
-      <vk-button type='primary' class='uk-button-small' v-vk-tooltip="'Calendar을 움직입니다.'">
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'Calendar을 움직입니다.'">
         <vk-icon icon='move' style='-webkit-app-region: drag;' />
       </vk-button>
     </div>
     
     <div class='uk-button-group calendar-head-right'>
-      <vk-button type='primary' class='uk-button-small' @click='Fcalendar.prev();reloadEvent();'><vk-icon icon='chevron-left'/></vk-button>
-      <vk-button type='primary' class='uk-button-small' @click='Fcalendar.today();reloadEvent();'><vk-icon icon='clock'/></vk-button>
-      <vk-button type='primary' class='uk-button-small' @click='Fcalendar.next();reloadEvent();'><vk-icon icon='chevron-right'/></vk-button>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='Fcalendar.prev();reloadEvent();'><vk-icon icon='chevron-left'/></vk-button>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='Fcalendar.today();reloadEvent();'><vk-icon icon='clock'/></vk-button>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='Fcalendar.next();reloadEvent();'><vk-icon icon='chevron-right'/></vk-button>
     </div>
     <events v-show='show' :Fcalendar='Fcalendar' :event='eventValue' :show='show' ref='eventform'/>
   </div>
@@ -152,11 +152,12 @@ export default {
         skipTaskbar: false,
         webPreferences: { webSecurity: false }
       })
+      settingWindow.setSkipTaskbar(false)
       settingWindow.setIgnoreMouseEvents(false)
       settingWindow.setMenu(null)
-      // settingWindow.webContents.openDevTools({
-      //   mode: 'undocked'
-      // })
+      settingWindow.webContents.openDevTools({
+        mode: 'undocked'
+      })
       settingWindow.loadURL(mainPath)
       settingWindow.webContents.once('did-finish-load', () => {
         settingWindow.webContents.send('init-options', (this.$store.getters.getAll))
@@ -178,6 +179,9 @@ export default {
     },
     ignoreMouse () {
       window.disableMouse()
+    },
+    convertRGBA (rgba) {
+      return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`
     }
   },
   mounted () {
@@ -190,7 +194,7 @@ export default {
       },
       themeSystem: 'bootstrap4',
       locale: 'ko',
-      height: 600,
+      height: window.outerHeight * 0.7,
       eventLimit: true,
       views: {
         week: {
@@ -216,6 +220,9 @@ export default {
       eventLimitText: '더보기'
     })
     window.Fcalendar = this.Fcalendar = $('#calendar').fullCalendar('getCalendar')
+    window.onresize = (e) => {
+      $('#calendar').fullCalendar('option', 'height', window.outerHeight * 0.7)
+    }
     $('#gcal-event').on('mouseover', () => {
       this.show = true
     })
@@ -227,6 +234,13 @@ export default {
       this.$bus.$emit('loadURL', e.currentTarget.href)
       return false
     })
+    $('#calendar, .fc-center>h2').css('color', this.convertRGBA(this.getCalendarOption.color.rgba))
+    $('#calendar ').css('background-color', this.convertRGBA(this.getCalendarOption.background.rgba))
+  },
+  computed: {
+    getCalendarOption () {
+      return this.$store.getters.getOptions('calendar')
+    }
   },
   components: {
     events
@@ -234,6 +248,10 @@ export default {
   watch: {
     'startTime': function (newval, old) {
       this.endTime = newval
+    },
+    getCalendarOption (newval, old) {
+      $('#calendar, .fc-center>h2').css('color', this.convertRGBA(newval.color.rgba))
+      $('#calendar').css('background-color', this.convertRGBA(newval.background.rgba))
     }
   }
 }
@@ -250,9 +268,9 @@ $side-margin: 20%;
   position: relative;
   padding: 0 $side-margin;
   background-clip: content-box;
-  height: 700px;
+  height: 65%;
   .fc-view-container{
-    background: rgba(255, 255, 255, 0.4);
+    // background: rgba(255, 255, 255, 0.4);
   }
 }
 .fc-today{
@@ -261,7 +279,7 @@ $side-margin: 20%;
 
 .calendar-head-left {
   position: absolute !important;
-  top: 1%;
+  top: 0%;
 }
 
 .calendar-head-right {
