@@ -1,9 +1,9 @@
 {
   "name": "desktop-calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "tbvjaos510 <tbvjaos510@naver.com>",
   "description": "electron-vue(vikit)으로 제작한 desktop calendar",
-  "license": null,
+  "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
