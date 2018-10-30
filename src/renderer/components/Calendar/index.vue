@@ -234,8 +234,8 @@ export default {
       this.$bus.$emit('loadURL', e.currentTarget.href)
       return false
     })
-    $('#calendar, .fc-center>h2').css('color', this.convertRGBA(this.getCalendarOption.color.rgba))
-    $('#calendar ').css('background-color', this.convertRGBA(this.getCalendarOption.background.rgba))
+    $('#calendar, .fc-center>h2').css('color', this.convertRGBA(this.getCalendarOption.color.rgba || this.getCalendarOption.color))
+    $('#calendar ').css('background-color', this.convertRGBA(this.getCalendarOption.background.rgba || this.getCalendarOption.background))
   },
   computed: {
     getCalendarOption () {
@@ -250,8 +250,8 @@ export default {
       this.endTime = newval
     },
     getCalendarOption (newval, old) {
-      $('#calendar, .fc-center>h2').css('color', this.convertRGBA(newval.color.rgba))
-      $('#calendar').css('background-color', this.convertRGBA(newval.background.rgba))
+      $('#calendar, .fc-center>h2').css('color', this.convertRGBA(newval.color.rgba || newval.color))
+      $('#calendar').css('background-color', this.convertRGBA(newval.background.rgba || newval.background))
     }
   }
 }

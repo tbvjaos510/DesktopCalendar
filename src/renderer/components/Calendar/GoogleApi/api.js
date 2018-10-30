@@ -103,7 +103,7 @@ export default {
     this.request('https://www.googleapis.com/calendar/v3/users/me/calendarList?showHidden=true', callback)
   },
   events (id, start, end, callback) {
-    this.request(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events?timeMin=${start.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}&timeMax=${end.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}`, callback)
+    this.request(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events?timeMin=${start.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}&timeMax=${end.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}&timeZone=Asia/Seoul`, callback)
   },
   deleteEvent (oid, id, cb) {
     console.log(oid, id)

@@ -19,8 +19,18 @@ var settings = {
     size: '6em'
   },
   calendar: {
-    background: '#00000066',
-    color: 'black',
+    background: {
+      r: 255,
+      g: 255,
+      b: 255,
+      a: 0.3
+    },
+    color: {
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 1
+    },
     buttonType: 'primary'
   },
   changeOption (key, value) {

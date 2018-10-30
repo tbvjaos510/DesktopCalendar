@@ -8,7 +8,7 @@ import store from './store'
 import Vuikit from 'vuikit'
 import VuikitIcons from '@vuikit/icons'
 import '@vuikit/theme/dist/vuikit.min.css'
-
+import 'uikit/dist/css/uikit.min.css'
 // Vue-bus 사용
 import VueBus from 'vue-bus'
 
@@ -51,7 +51,7 @@ Vue.directive('linkified', linkify)
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
-
+Vue.DevMode = Vue.prototype.DevMode = () => process.env.NODE_ENV === 'development'
 /* eslint-disable no-new */
 new Vue({
   components: {

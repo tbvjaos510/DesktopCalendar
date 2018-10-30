@@ -1,7 +1,8 @@
 'use strict'
 
 import electron, { Menu } from 'electron'
-const { app, BrowserWindow, Tray, Notification } = electron
+import fs from 'fs'
+const { app, BrowserWindow, Tray, Notification, ipcMain } = electron
 
 /**
  * Set `__static` path to static files in production
@@ -10,11 +11,15 @@ const { app, BrowserWindow, Tray, Notification } = electron
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
-let mainWindow
+let mainWindow, startWindow
 let tray = null
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
+
+const setupURL = process.env.NODE_ENV === 'development'
+  ? `http://localhost:9080/#/setup`
+  : `file://${__dirname}/index.html#setup`
 
 function createWindow () {
   /**
@@ -39,28 +44,37 @@ function createWindow () {
     console.log('resized')
   })
 }
+function setupWindow () {
+  fs.stat('calendar.json', (err, stat) => {
+    if (err) {
+      startWindow = new BrowserWindow()
+      startWindow.setMenuBarVisibility(false)
+      startWindow.loadURL(setupURL)
+      startWindow.on('close', () => {
+        startWindow = null
+      })
+    } else {
+      createWindow()
+    }
+  })
+}
+ipcMain.on('settingend', () => {
+  createWindow()
+  startWindow.destroy()
+})
 app.setAppUserModelId('com.sanghie.dcalendar')
 
-app.on('ready', createWindow)
+app.on('ready', setupWindow)
 app.on('ready', () => {
   tray = new Tray(__static + '/icon.png')
   tray.setToolTip('DeskTop Calendar')
-  const contextMenu = Menu.buildFromTemplate([
+  const contextMenu = [
     {
       label: '프로그램 종료',
       type: 'normal',
       click: () => {
         tray.destroy()
         mainWindow.close()
-      }
-    },
-    {
-      label: 'Open DevTool',
-      type: 'normal',
-      click: () => {
-        mainWindow.webContents.openDevTools({
-          mode: 'undocked'
-        })
       }
     },
     {
@@ -77,8 +91,20 @@ app.on('ready', () => {
         mainWindow.show()
       }
     }
-  ])
-  tray.setContextMenu(contextMenu)
+  ]
+  if (process.env.NODE_ENV === 'development') {
+    contextMenu.push(
+      {
+        label: 'Open DevTool',
+        type: 'normal',
+        click: () => {
+          mainWindow.webContents.openDevTools({
+            mode: 'undocked'
+          })
+        }
+      })
+  }
+  tray.setContextMenu(Menu.buildFromTemplate(contextMenu))
   let notify = new Notification({
     title: 'Desktop Calendar 실행 중',
     body: 'Desktop Calendar가 실행 중입니다. 트레이 아이콘에서 볼 수 있습니다.'
@@ -88,18 +114,18 @@ app.on('ready', () => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    if (tray && tray.isDestroyed()) {
+    if (tray) {
       tray.destroy()
     }
     app.quit()
   }
 })
 
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
+// app.on('activate', () => {
+//   if (mainWindow === null) {
+//     createWindow()
+//   }
+// })
 
 /**
  * Auto Updater

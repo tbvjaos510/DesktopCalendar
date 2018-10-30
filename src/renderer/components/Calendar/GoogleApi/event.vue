@@ -12,8 +12,8 @@
         <time>{{getFromNow()}}</time>
       </p>
       <div v-vk-tooltip="'클릭으로 보기 변경'" v-if="timeShow" @click="timeShow = false">
-        <p class="uk-text-meta uk-margin-remove timeShow"><time>{{event.start?event.start.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
-        <p class="uk-text-meta uk-margin-remove timeShow"><time>~ {{event.end?event.end.locale('ko').format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
+        <p class="uk-text-meta uk-margin-remove timeShow"><time>{{event.start?event.start.format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
+        <p class="uk-text-meta uk-margin-remove timeShow"><time>~ {{event.end?event.end.format('YYYY-MM-DD A h:mm:ss'):''}}</time></p>
       </div>
        </div>
     <vk-icon-link v-if="!isDelete" icon="trash" class="uk-float-right" v-vk-tooltip="'이벤트 삭제'" @click="deleteEvent"></vk-icon-link>
@@ -27,6 +27,7 @@
 
 <script>
 import * as auth from './api.js'
+import fs from 'fs'
 import { shell } from 'electron'
 const api = auth.default
 export default {
@@ -70,13 +71,16 @@ export default {
       api.setAxios(this.$http)
       api.authorize(key => {
         this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + key
-        api.colors((res) => {
-          this.gcolor = res.data
-          console.log(res.data)
-          api.calendarList((res) => {
-            const calendars = res.data.items
+        api.colors((color) => {
+          this.gcolor = color.data
+          fs.readFile('calendar.json', (err, res) => {
+            if (err) return console.error(err)
+            const calendars = JSON.parse(res)
+            console.log(calendars)
             this.Fcalendar.removeEvents()
             for (const cal of calendars) {
+              if (!cal.checked) continue
+              console.log(cal)
               colors[cal.id] = this.gcolor.calendar[cal.colorId]
               api.events(cal.id, this.Fcalendar.view.start, this.Fcalendar.view.end, (events) => {
                 if (!events) return console.log('not found')

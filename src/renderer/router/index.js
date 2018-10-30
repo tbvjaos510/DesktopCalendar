@@ -15,6 +15,11 @@ export default new Router({
       path: '/setting',
       name: 'SettingPage',
       component: () => import('../views/Setting.vue')
+    },
+    {
+      path: '/setup',
+      name: 'SetupPage',
+      component: () => import('../views/Setup.vue')
     }
   ]
 })

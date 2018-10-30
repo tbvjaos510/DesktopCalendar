@@ -5,6 +5,16 @@
       <vk-button type="primary" size="small" @click="deleteToken">
         다른 계정으로 로그인
       </vk-button>
+      <div class="uk-width-1-1 uk-margin-top" v-if="calendarList.length">
+        <h4>사용할 달력 <vk-button type="primary" size="small" @click="saveCalendar">적용</vk-button></h4>
+        <ul class="uk-list uk-list-divider uk-width-1-1 uk-text-left itemlist">
+          <li v-for="(key) in calendarList">
+            <input type="checkbox" class="uk-checkbox" v-model="key.checked" :disabled="key.isprimary">
+            <span v-vk-tooltip="key.isprimary? '기본 달력입니다': null">{{key.summary}}</span>
+          </li>
+        </ul>
+      </div>
+
       <p>
         <table>
           <tr class="uk-text-center">
@@ -34,25 +44,58 @@
 <script>
 import fs from 'fs'
 import { Chrome } from 'vue-color'
+import api from './../Calendar/GoogleApi/api.js'
 
 export default {
   data () {
     return {
+      calendarList: []
     }
   },
   components: {
     'chrome-picker': Chrome
   },
+  mounted () {
+    fs.readFile('calendar.json', (err, res) => {
+      if (err) return console.error(err)
+      res = JSON.parse(res)
+      this.calendarList = res
+    })
+  },
   name: 'setting-calendar',
   methods: {
+    auth () {
+      api.authorize(key => {
+        this.isAuthed = true
+        this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + key
+        api.setAxios(this.$http)
+        api.calendarList(res => {
+          console.log(res)
+          this.calendarList = res.data.items.map(function (item) {
+            var o = Object.assign({}, item)
+            o.checked = true
+            if (item.primary) o.isprimary = true
+            return o
+          })
+        })
+      })
+    },
+    saveCalendar () {
+      fs.writeFile('./calendar.json', JSON.stringify(this.calendarList), (err) => {
+        if (err) console.error(err)
+        console.log('calendar save success')
+        this.parents.webContents.reload()
+      })
+    },
     deleteToken () {
+      this.calendarList = []
       if (fs.existsSync('token.json')) {
         fs.unlink('token.json', (err) => {
           if (err) return console.error(err)
-          this.parents.webContents.reload()
+          this.auth()
         })
       } else {
-        this.parents.webContents.reload()
+        this.auth()
       }
     },
     save (key, value) {
@@ -72,5 +115,8 @@ export default {
 </script>
 
 <style>
-
+.itemlist {
+  height: 300px;
+  overflow: auto;
+}
 </style>

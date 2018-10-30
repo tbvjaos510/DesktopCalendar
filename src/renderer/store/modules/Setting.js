@@ -9,20 +9,16 @@ export default {
       },
       calendar: {
         background: {
-          rgba: {
-            r: 255,
-            g: 255,
-            b: 255,
-            a: 0.3
-          }
+          r: 255,
+          g: 255,
+          b: 255,
+          a: 0.3
         },
         color: {
-          rgba: {
-            r: 0,
-            g: 0,
-            b: 0,
-            a: 1
-          }
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 1
         },
         buttonType: 'primary'
       }
@@ -33,6 +29,7 @@ export default {
     getAll: state => state.options
   },
   mutations: {
-    setOptions: (state, payload) => (state.options[payload.key] = payload.value)
+    setOptions: (state, payload) => (state.options[payload.key] = payload.value),
+    setAll: (state, payload) => (state.options = payload)
   }
 }
