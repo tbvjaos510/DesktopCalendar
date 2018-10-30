@@ -2,8 +2,11 @@
 
 import electron, { Menu } from 'electron'
 import fs from 'fs'
+import path from 'path'
 const { app, BrowserWindow, Tray, Notification, ipcMain } = electron
 
+// Set Path to Exe
+process.chdir(path.dirname(process.execPath))
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -25,6 +28,7 @@ function createWindow () {
   /**
    * Initial window options
    */
+  openTray()
   const screen = electron.screen
   mainWindow = new BrowserWindow({
     transparent: true,
@@ -47,9 +51,14 @@ function createWindow () {
 function setupWindow () {
   fs.stat('calendar.json', (err, stat) => {
     if (err) {
-      startWindow = new BrowserWindow()
-      startWindow.setMenuBarVisibility(false)
+      startWindow = new BrowserWindow({
+        title: 'Desktop Calendar 시작'
+      })
+      // startWindow.setMenuBarVisibility(false)
       startWindow.loadURL(setupURL)
+      // startWindow.webContents.openDevTools({
+      //   mode: 'undocked'
+      // })
       startWindow.on('close', () => {
         startWindow = null
       })
@@ -64,8 +73,7 @@ ipcMain.on('settingend', () => {
 })
 app.setAppUserModelId('com.sanghie.dcalendar')
 
-app.on('ready', setupWindow)
-app.on('ready', () => {
+function openTray () {
   tray = new Tray(__static + '/icon.png')
   tray.setToolTip('DeskTop Calendar')
   const contextMenu = [
@@ -110,7 +118,8 @@ app.on('ready', () => {
     body: 'Desktop Calendar가 실행 중입니다. 트레이 아이콘에서 볼 수 있습니다.'
   })
   notify.show()
-})
+}
+app.on('ready', setupWindow)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

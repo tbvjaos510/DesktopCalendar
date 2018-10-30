@@ -1,18 +1,18 @@
 <template>
   <div id='calendar'>
     <div class='uk-button-group calendar-head-left'> 
-      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='reloadEvent' v-vk-tooltip="'새로고침'" id='reload-btn'>새로고침</vk-button>
-      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small'>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='reloadEvent' v-vk-tooltip="'새로고침'" id='reload-btn' @mouseover="setIgnore" @mouseout="disableIgnore">새로고침</vk-button>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @mouseover="setIgnore" @mouseout="disableIgnore">
         <vk-icon icon='calendar' v-vk-tooltip="'Google Calendar 열기'" @click="$bus.emit('loadURL', 'https://calendar.google.com/')"/>
       </vk-button>
-      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'설정을 엽니다.'" id='createOption' @click='loadSetting' >
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'설정을 엽니다.'" id='createOption' @click='loadSetting'  @mouseover="setIgnore" @mouseout="disableIgnore" >
         <vk-icon icon='settings'/>
       </vk-button>
-      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'Event 추가'" @click='showAdd = true'>
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'Event 추가'" ref="addEventBtn" @click='showAdd = true'  @mouseover="setIgnore" @mouseout="disableIgnore">
         <vk-icon icon='plus' />
       </vk-button>
       <vk-drop mode='click'>
-        <vk-card padding='small' class='event-add'>
+        <vk-card padding='small' class='event-add' @mouseover="setIgnore" @mouseout="disableIgnore">
           <fieldset class='uk-fieldset'>
             제목
             <input type='text' placeholder='제목 입력' class='uk-input' v-model='summary'>
@@ -27,14 +27,14 @@
                 <option>날짜-시간</option>
               </select> <br>
               시작
-              <datetime v-model='startTime' v-if="timeType == '날짜'" :phrases="{ok: '확인', cancel: '취소'}" type="date"  input-class='uk-width color-input' :use12-hour='true' @close="ignoreMouse"/>
-              <datetime v-model='startTime' v-else :phrases="{ok: '확인', cancel: '취소'}" type="datetime"  input-class='uk-width color-input' :use12-hour='true' @close="ignoreMouse"/>
+              <datetime v-model='startTime' v-if="timeType == '날짜'" :phrases="{ok: '확인', cancel: '취소'}" type="date"  input-class='uk-width color-input' :use12-hour='true'/>
+              <datetime v-model='startTime' v-else :phrases="{ok: '확인', cancel: '취소'}" type="datetime"  input-class='uk-width color-input' :use12-hour='true'/>
               
             </p>
             <p class='uk-margin-small-top'>
               종료
-              <datetime v-model='endTime' v-if="timeType == '날짜'" :phrases="{ok: '확인', cancel: '취소'}" type="date"  input-class='uk-width' :use12-hour='true' @close="ignoreMouse"/>
-              <datetime v-model='endTime' v-else :phrases="{ok: '확인', cancel: '취소'}" type="datetime"  input-class='uk-width' :use12-hour='true' @close="ignoreMouse"/>
+              <datetime v-model='endTime' v-if="timeType == '날짜'" :phrases="{ok: '확인', cancel: '취소'}" type="date"  input-class='uk-width' :use12-hour='true'/>
+              <datetime v-model='endTime' v-else :phrases="{ok: '확인', cancel: '취소'}" type="datetime"  input-class='uk-width' :use12-hour='true'/>
             </p>
             <p class='uk-margin-small-top'>
               <div v-for="(color, i) in gcolor" :style="{background : color.background}" class="event-color" :class="{eventcolorselect: colorid == i}" @click="colorid = i">
@@ -45,12 +45,12 @@
           </fieldset>
         </vk-card>
       </vk-drop>
-      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'Calendar을 움직입니다.'">
+      <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'Calendar을 움직입니다.'"  @mouseover="setIgnore" @mouseout="disableIgnore">
         <vk-icon icon='move' style='-webkit-app-region: drag;' />
       </vk-button>
     </div>
     
-    <div class='uk-button-group calendar-head-right'>
+    <div class='uk-button-group calendar-head-right' @mouseover="setIgnore" @mouseout="disableIgnore">
       <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='Fcalendar.prev();reloadEvent();'><vk-icon icon='chevron-left'/></vk-button>
       <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='Fcalendar.today();reloadEvent();'><vk-icon icon='clock'/></vk-button>
       <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' @click='Fcalendar.next();reloadEvent();'><vk-icon icon='chevron-right'/></vk-button>
@@ -155,9 +155,11 @@ export default {
       settingWindow.setSkipTaskbar(false)
       settingWindow.setIgnoreMouseEvents(false)
       settingWindow.setMenu(null)
-      settingWindow.webContents.openDevTools({
-        mode: 'undocked'
-      })
+      if (this.DevMode()) {
+        settingWindow.webContents.openDevTools({
+          mode: 'undocked'
+        })
+      }
       settingWindow.loadURL(mainPath)
       settingWindow.webContents.once('did-finish-load', () => {
         settingWindow.webContents.send('init-options', (this.$store.getters.getAll))
@@ -168,6 +170,7 @@ export default {
       })
     },
     insertEvent (e) {
+      this.$refs.addEventBtn.click()
       let resultHtml = converter.makeHtml(this.description)
       console.log(resultHtml)
       this.$refs.eventform.insertEvent(this.timeType === '날짜', this.startTime, this.endTime, this.summary, resultHtml, this.colorid + 1, (e) => {

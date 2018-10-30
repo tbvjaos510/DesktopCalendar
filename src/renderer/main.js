@@ -32,15 +32,17 @@ Settings.defaultLocale = 'ko'
 // CurrentWindow 사용
 var win = require('electron').remote.getCurrentWindow()
 
-window.enableMouse = function (e) {
+const enableMouse = function (e) {
   win.setIgnoreMouseEvents(false)
+  console.log('enable')
 }
-window.disableMouse = function (e) {
+const disableMouse = function (e) {
   if (e) {
     const pos = e.currentTarget.getBoundingClientRect()
     if ((e.clientX > pos.left && e.clientY > pos.top) && (e.clientX < pos.left + pos.width && e.clientY < pos.top + pos.height)) return true
   }
   win.setIgnoreMouseEvents(true, { forward: true })
+  console.log('disable')
 }
 Vue.use(Vuikit)
 Vue.use(VuikitIcons)
@@ -52,6 +54,8 @@ if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.DevMode = Vue.prototype.DevMode = () => process.env.NODE_ENV === 'development'
+Vue.setIgnore = Vue.prototype.setIgnore = enableMouse
+Vue.disableIgnore = Vue.prototype.disableIgnore = disableMouse
 /* eslint-disable no-new */
 new Vue({
   components: {

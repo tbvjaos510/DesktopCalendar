@@ -1,5 +1,5 @@
 <template>
-  <vk-card class="uk-card-small" id="gcal-event" :style="{ borderTopColor: event.color, top: (event.top)+'px', left: (event.left)+'px' }" >
+  <vk-card class="uk-card-small" id="gcal-event" :style="{ borderTopColor: event.color, top: (event.top)+'px', left: (event.left)+'px' }" @mouseover="setIgnore" @mouseout="disableIgnore" >
     <div slot="header" style="padding: 0">
      <vk-icon-link id="open-google-calendar" icon="google" 
      class="uk-position-top-right uk-padding-small uk-border-circle google-button" 

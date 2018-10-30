@@ -2,19 +2,6 @@
   <div class="uk-padding-large uk-padding-remove-top">
     <h2>Calendar 설정</h2>
     <span class="uk-text-muted">
-      <vk-button type="primary" size="small" @click="deleteToken">
-        다른 계정으로 로그인
-      </vk-button>
-      <div class="uk-width-1-1 uk-margin-top" v-if="calendarList.length">
-        <h4>사용할 달력 <vk-button type="primary" size="small" @click="saveCalendar">적용</vk-button></h4>
-        <ul class="uk-list uk-list-divider uk-width-1-1 uk-text-left itemlist">
-          <li v-for="(key) in calendarList">
-            <input type="checkbox" class="uk-checkbox" v-model="key.checked" :disabled="key.isprimary">
-            <span v-vk-tooltip="key.isprimary? '기본 달력입니다': null">{{key.summary}}</span>
-          </li>
-        </ul>
-      </div>
-
       <p>
         <table>
           <tr class="uk-text-center">
@@ -38,6 +25,19 @@
         <vk-button type="danger" size="small" @click="changeButton('danger')">빨강</vk-button>
       </p>
     </span>
+      <vk-button type="primary" size="small" @click="deleteToken">
+        다른 계정으로 로그인
+      </vk-button>
+      <div class="uk-width-1-1 uk-margin-top" v-if="calendarList.length">
+        <h4>사용할 달력 <vk-button type="primary" size="small" @click="saveCalendar">적용</vk-button></h4>
+        <ul class="uk-list uk-list-divider uk-width-1-1 uk-text-left itemlist">
+          <li v-for="(key) in calendarList">
+            <input type="checkbox" class="uk-checkbox" v-model="key.checked" :disabled="key.isprimary">
+            <span v-vk-tooltip="key.isprimary? '기본 달력입니다': null">{{key.summary}}</span>
+          </li>
+        </ul>
+      </div>
+
   </div>
 </template>
 

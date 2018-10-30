@@ -3,6 +3,7 @@
     <setting-header />
     <setting-timer :setting="settings"/>
     <setting-calendar :setting="settings" :parents="parents"/>
+    <setting-program :setting="settings"/>
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import SettingHeader from '../components/Settings/Header'
 import SettingTimer from '../components/Settings/SettingTimer'
 import SettingCalendar from '../components/Settings/SettingCalendar'
+import SettingProgram from '../components/Settings/SettingProgram'
 import { ipcRenderer, remote } from 'electron'
 var settings = {
   timeMoment: 'LTS',
@@ -66,7 +68,8 @@ export default {
   components: {
     SettingHeader,
     SettingTimer,
-    SettingCalendar
+    SettingCalendar,
+    SettingProgram
   }
 }
 </script>
