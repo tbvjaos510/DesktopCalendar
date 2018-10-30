@@ -50,7 +50,7 @@ export default {
       })
     },
     save () {
-      fs.writeFile('./calendar.json', JSON.stringify(this.calendarList), function (err) {
+      fs.writeFile(this.appdata + '/calendar.json', JSON.stringify(this.calendarList), function (err) {
         if (err) console.error(err)
         console.log('calendar save success')
       })

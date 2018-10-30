@@ -6,7 +6,7 @@ import fs from 'fs'
 import { remote } from 'electron'
 // import { OAuth2Client } from 'google-auth-library'
 
-const TOKEN_PATH = './token.json'
+const TOKEN_PATH = process.env.LOCALAPPDATA + '/DesktopCalendar/token.json'
 const SCOPES = ['https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events']
 var APIKEY = null
 let Popup

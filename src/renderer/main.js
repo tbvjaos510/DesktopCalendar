@@ -56,6 +56,7 @@ Vue.config.productionTip = false
 Vue.DevMode = Vue.prototype.DevMode = () => process.env.NODE_ENV === 'development'
 Vue.setIgnore = Vue.prototype.setIgnore = enableMouse
 Vue.disableIgnore = Vue.prototype.disableIgnore = disableMouse
+Vue.appdata = Vue.prototype.appdata = process.env.LOCALAPPDATA + '/DesktopCalendar'
 /* eslint-disable no-new */
 new Vue({
   components: {

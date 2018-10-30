@@ -73,7 +73,7 @@ export default {
         this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + key
         api.colors((color) => {
           this.gcolor = color.data
-          fs.readFile('calendar.json', (err, res) => {
+          fs.readFile(this.appdata + '/calendar.json', (err, res) => {
             if (err) return console.error(err)
             const calendars = JSON.parse(res)
             console.log(calendars)

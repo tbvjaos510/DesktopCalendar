@@ -4,7 +4,6 @@ import electron, { Menu } from 'electron'
 import fs from 'fs'
 import path from 'path'
 const { app, BrowserWindow, Tray, Notification, ipcMain } = electron
-
 // Set Path to Exe
 process.chdir(path.dirname(process.execPath))
 /**
@@ -49,18 +48,21 @@ function createWindow () {
   })
 }
 function setupWindow () {
-  fs.stat('calendar.json', (err, stat) => {
+  fs.stat(process.env.LOCALAPPDATA + '/DesktopCalendar/calendar.json', (err, stat) => {
     if (err) {
-      startWindow = new BrowserWindow({
-        title: 'Desktop Calendar 시작'
-      })
-      // startWindow.setMenuBarVisibility(false)
-      startWindow.loadURL(setupURL)
-      // startWindow.webContents.openDevTools({
-      //   mode: 'undocked'
-      // })
-      startWindow.on('close', () => {
-        startWindow = null
+      fs.mkdir(process.env.LOCALAPPDATA + '/DesktopCalendar', (errs, res) => {
+        if (errs) console.log('fileExists')
+        startWindow = new BrowserWindow({
+          title: 'Desktop Calendar 시작'
+        })
+        // startWindow.setMenuBarVisibility(false)
+        startWindow.loadURL(setupURL)
+        // startWindow.webContents.openDevTools({
+        //   mode: 'undocked'
+        // })
+        startWindow.on('close', () => {
+          startWindow = null
+        })
       })
     } else {
       createWindow()

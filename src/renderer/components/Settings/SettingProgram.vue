@@ -38,9 +38,9 @@ export default {
       }
     },
     restartApp () {
-      fs.unlink('calendar.json', (e) => {
+      fs.unlink(this.appdata + '/calendar.json', (e) => {
         if (e) console.log(e)
-        fs.unlink('token.json', (e) => {
+        fs.unlink(this.appdata + '/token.json', (e) => {
           if (e) console.log(e)
           remote.app.relaunch()
           remote.app.exit(0)

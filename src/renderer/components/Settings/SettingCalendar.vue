@@ -56,7 +56,7 @@ export default {
     'chrome-picker': Chrome
   },
   mounted () {
-    fs.readFile('calendar.json', (err, res) => {
+    fs.readFile(this.appdata + '/calendar.json', (err, res) => {
       if (err) return console.error(err)
       res = JSON.parse(res)
       this.calendarList = res
@@ -81,7 +81,7 @@ export default {
       })
     },
     saveCalendar () {
-      fs.writeFile('./calendar.json', JSON.stringify(this.calendarList), (err) => {
+      fs.writeFile(this.appdata + '/calendar.json', JSON.stringify(this.calendarList), (err) => {
         if (err) console.error(err)
         console.log('calendar save success')
         this.parents.webContents.reload()
@@ -89,8 +89,8 @@ export default {
     },
     deleteToken () {
       this.calendarList = []
-      if (fs.existsSync('token.json')) {
-        fs.unlink('token.json', (err) => {
+      if (fs.existsSync(this.appdata + '/token.json')) {
+        fs.unlink(this.appdata + '/token.json', (err) => {
           if (err) return console.error(err)
           this.auth()
         })
