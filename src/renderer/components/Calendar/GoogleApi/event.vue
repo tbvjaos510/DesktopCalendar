@@ -77,20 +77,20 @@ export default {
           fs.readFile(this.appdata + '/calendar.json', (err, res) => {
             if (err) return console.error(err)
             const calendars = JSON.parse(res)
-            console.log(calendars)
+            // console.log(calendars)
             this.Fcalendar.removeEvents()
             for (const cal of calendars) {
               if (!cal.checked) continue
-              console.log(cal)
+              // console.log(cal)
               colors[cal.id] = this.gcolor.calendar[cal.colorId]
               api.events(cal.id, this.Fcalendar.view.start, this.Fcalendar.view.end, (events) => {
-                if (!events) return console.log('not found')
+                if (!events) return 0
                 this.addEvent(events.data.items, colors[cal.id])
               })
             }
             // catch end
             this.$bus.$once('forceReload', () => {
-              console.log('init start')
+              // console.log('init start')
               this.init()
             })
             this.$bus.emit('reloadEnd')
@@ -159,7 +159,7 @@ export default {
       if (oldValue !== newValue) {
         clearInterval(this.refreshInterval)
         setInterval(this.init, newValue * 1000)
-        console.log('refresh Interval')
+        // console.log('refresh Interval')
       }
     }
   },

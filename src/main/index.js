@@ -38,13 +38,11 @@ function createWindow () {
   mainWindow.setIgnoreMouseEvents(true, { forward: true })
   mainWindow.loadURL(winURL)
   mainWindow.on('blur', () => {
+    console.log('blured')
     mainWindow.setIgnoreMouseEvents(true, { forward: true })
   })
   mainWindow.on('closed', () => {
     mainWindow = null
-  })
-  mainWindow.on('resize', () => {
-    console.log('resized')
   })
 }
 function setupWindow () {

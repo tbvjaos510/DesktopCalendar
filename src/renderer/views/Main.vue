@@ -17,7 +17,7 @@ export default {
   },
   mounted () {
     ipcRenderer.on('setOption', (event, message) => {
-      console.log('set Options')
+      // console.log('set Options')
       this.$store.commit('setOptions', message)
     })
     // $(document).on('mouseenter', 'button, a, textarea, .uk-input, .gcal-body, .event-add, .timeShow, .color-input', window.enableMouse)

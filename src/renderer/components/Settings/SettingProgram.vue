@@ -36,7 +36,6 @@ export default {
   mounted () {
     start.isEnabled()
       .then(enabled => {
-        console.log(enabled)
         this.onstartup = enabled
       })
   },

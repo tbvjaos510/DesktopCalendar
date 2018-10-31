@@ -11,7 +11,7 @@
       <vk-button :type='getCalendarOption.buttonType' class='uk-button-small' v-vk-tooltip="'Event 추가'" ref="addEventBtn" @click='showAdd = true'  @mouseover="setIgnore" @mouseout="disableIgnore">
         <vk-icon icon='plus' />
       </vk-button>
-      <vk-drop mode='click'>
+      <vk-drop mode='click' ref="eventAddDrop">
         <vk-card padding='small' class='event-add' @mouseover="setIgnore" @mouseout="disableIgnore">
           <fieldset class='uk-fieldset'>
             제목
@@ -170,11 +170,11 @@ export default {
       })
     },
     insertEvent (e) {
-      this.$refs.addEventBtn.click()
+      this.$refs.eventAddDrop.hide()
       let resultHtml = converter.makeHtml(this.description)
-      console.log(resultHtml)
+      // console.log(resultHtml)
       this.$refs.eventform.insertEvent(this.timeType === '날짜', this.startTime, this.endTime, this.summary, resultHtml, this.colorid + 1, (e) => {
-        console.log(e)
+        if (e) console.log(e)
       })
       this.startTime = this.endTime = this.summary = this.description = ''
       this.startType = this.endType = '날짜'
@@ -185,6 +185,26 @@ export default {
     },
     convertRGBA (rgba) {
       return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`
+    },
+    addEventDate (e) {
+      this.$refs.eventAddDrop.show()
+      this.startTime = e
+    },
+    addPlusBtn () {
+      const plusbtn = document.createElement('a')
+      plusbtn.setAttribute('uk-icon', 'plus-circle')
+      plusbtn.onmouseover = this.setIgnore
+      plusbtn.onmouseout = this.disableIgnore
+      plusbtn.style.marginLeft = '2px'
+
+      $('.fc-day').hover((e) => {
+        if (e.type === 'mouseleave') {
+          e.currentTarget.removeChild(plusbtn)
+        } else if (e.type === 'mouseenter') {
+          plusbtn.onclick = () => this.addEventDate(e.currentTarget.getAttribute('data-date'))
+          e.currentTarget.appendChild(plusbtn)
+        }
+      })
     }
   },
   mounted () {
@@ -205,6 +225,9 @@ export default {
           duration: { weeks: 3 }
         }
       },
+      viewRender: (view) => {
+        this.addPlusBtn()
+      },
       eventMouseover: (event, jsevent) => {
         if (this.$refs.eventform.isDelete) {
           return 0
@@ -213,7 +236,7 @@ export default {
         event.left = jsevent.currentTarget.getBoundingClientRect().left
         this.eventValue = event
         this.show = true
-        console.log(event)
+        // console.log(event)
       },
       eventMouseout: (event, jsevent) => {
         this.show = false
@@ -272,9 +295,6 @@ $side-margin: 20%;
   padding: 0 $side-margin;
   background-clip: content-box;
   height: 65%;
-  .fc-view-container{
-    // background: rgba(255, 255, 255, 0.4);
-  }
 }
 .fc-today{
     background: rgba(215, 240, 247, 0.6);
@@ -312,10 +332,22 @@ $side-margin: 20%;
   position:absolute;
   color:black;
 }
-.fc-content {
-  // white-space: normal !important;
-}
 .fc-more-popover {
   background:white;
+}
+/*Allow pointer-events through*/
+.fc-slats, /*horizontals*/
+.fc-content-skeleton, /*day numbers*/
+.fc-bgevent-skeleton /*events container*/{
+    pointer-events:none
+}
+
+/*Turn pointer events back on*/
+.fc-bgevent,
+.fc-event-container{
+    pointer-events:auto; /*events*/
+}
+#event-plus-btn {
+  
 }
 </style>

@@ -37,7 +37,7 @@ var settings = {
   },
   refreshTime: 600,
   changeOption (key, value) {
-    console.log('changed')
+    // console.log('changed')
     remote.getCurrentWindow().getParentWindow().webContents.send('setOption', {
       key: key,
       value: value
@@ -55,7 +55,7 @@ export default {
   },
   mounted () {
     ipcRenderer.on('init-options', (event, store) => {
-      console.log(store)
+      // console.log(store)
       this.settings = store
       this.settings.changeOption = function (key, value) {
         remote.getCurrentWindow().getParentWindow().webContents.send('setOption', {

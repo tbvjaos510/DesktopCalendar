@@ -39,7 +39,7 @@ export default {
         this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + key
         api.setAxios(this.$http)
         api.calendarList(res => {
-          console.log(res)
+          // console.log(res)
           this.calendarList = res.data.items.map(function (item) {
             var o = Object.assign({}, item)
             o.checked = true
@@ -52,7 +52,7 @@ export default {
     save () {
       fs.writeFile(this.appdata + '/calendar.json', JSON.stringify(this.calendarList), function (err) {
         if (err) console.error(err)
-        console.log('calendar save success')
+        // console.log('calendar save success')
       })
     }
   }

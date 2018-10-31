@@ -20,7 +20,7 @@ function createToken (client, code, callback) {
     client.setCredentials(token)
     fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
       if (err) return console.error(err)
-      console.log('token success stored')
+      // console.log('token success stored')
       APIKEY = token.access_token
       callback(APIKEY)
     })
@@ -35,7 +35,7 @@ function getAccessToken (client, callback) {
     access_type: 'offline',
     scope: SCOPES
   })
-  console.log('Auth in authUrl', authUrl)
+  // console.log('Auth in authUrl', authUrl)
   Popup = new remote.BrowserWindow({ transparent: false, frame: true })
   Popup.setIgnoreMouseEvents(false)
   Popup.setMenuBarVisibility(false)
@@ -108,7 +108,7 @@ export default {
     this.request(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events?timeMin=${start.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}&timeMax=${end.format('YYYY-MM-DD[T]HH:mm:ss[Z]')}&timeZone=Asia/Seoul`, callback)
   },
   deleteEvent (oid, id, cb) {
-    console.log(oid, id)
+    // console.log(oid, id)
     axios.delete(`https://www.googleapis.com/calendar/v3/calendars/${oid}/events/${id}`)
       .then((req) => {
         cb(req)
@@ -141,11 +141,11 @@ export default {
     }
     axios.post(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, sendObject)
       .then((req) => {
-        console.log(req)
+        // console.log(req)
         cb(req.data)
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
         cb(null, err)
       })
   }
