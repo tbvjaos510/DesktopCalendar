@@ -21,7 +21,8 @@ export default {
           a: 1
         },
         buttonType: 'primary'
-      }
+      },
+      refreshTime: 600
     }
   },
   getters: {

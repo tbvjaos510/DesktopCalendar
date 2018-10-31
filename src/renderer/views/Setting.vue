@@ -35,6 +35,7 @@ var settings = {
     },
     buttonType: 'primary'
   },
+  refreshTime: 600,
   changeOption (key, value) {
     console.log('changed')
     remote.getCurrentWindow().getParentWindow().webContents.send('setOption', {

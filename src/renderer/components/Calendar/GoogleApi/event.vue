@@ -39,7 +39,8 @@ export default {
       timePast: false,
       isDelete: false,
       deleteError: false,
-      isUpdate: false
+      isUpdate: false,
+      refreshInterval: null
     }
   },
   methods: {
@@ -143,10 +144,23 @@ export default {
     this.$bus.$on('loadURL', (url) => {
       this.openExternal(url)
     })
+    this.refreshInterval = setInterval(this.init, this.getRefresh * 1000)
   },
   computed: {
     getDescription () {
       return this.event.description && this.event.description.replace('&lt;', '<').replace('&gt;', '>')
+    },
+    getRefresh () {
+      return this.$store.getters.getOptions('refreshTime')
+    }
+  },
+  watch: {
+    getRefresh (oldValue, newValue) {
+      if (oldValue !== newValue) {
+        clearInterval(this.refreshInterval)
+        setInterval(this.init, newValue * 1000)
+        console.log('refresh Interval')
+      }
     }
   },
   props: ['Fcalendar', 'event']

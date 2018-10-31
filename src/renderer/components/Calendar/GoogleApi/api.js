@@ -71,13 +71,15 @@ export default {
   authorize (callback) {
     const { clientsecret, clientid, redirecturis } = credentials.installed
     const oAuth2Client = new google.auth.OAuth2(clientid, clientsecret, redirecturis[0])
-    // Check if we have previously stored a token.
+    // Check if we have previously stored a token.r
     fs.readFile(TOKEN_PATH, (err, token) => {
       if (err || !token) return getAccessToken(oAuth2Client, callback)
       token = JSON.parse(token)
       oAuth2Client.setCredentials(token)
       APIKEY = token.access_token
-      setInterval(RefreshToken.bind(null, oAuth2Client), 3000000)
+      setInterval(() => {
+        RefreshToken(oAuth2Client)
+      }, 50 * 60 * 1000)
       if (token.expiry_date <= new Date()) {
         RefreshToken(oAuth2Client, callback)
       } else callback(APIKEY)
