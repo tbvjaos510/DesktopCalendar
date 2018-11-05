@@ -281,6 +281,8 @@ export default {
     })
     $('#calendar, .fc-center>h2').css('color', this.convertRGBA(this.getCalendarOption.color.rgba || this.getCalendarOption.color))
     $('#calendar ').css('background-color', this.convertRGBA(this.getCalendarOption.background.rgba || this.getCalendarOption.background))
+
+    this.calendarList()
   },
   computed: {
     getCalendarOption () {
