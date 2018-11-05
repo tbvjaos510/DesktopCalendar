@@ -130,8 +130,8 @@ export default {
         }
       })
     },
-    insertEvent (timeType, start, end, title, content, colorid, cb) {
-      api.insertEvent(timeType, start, end, title, content, colorid, (req) => {
+    insertEvent (calendarid, timeType, start, end, title, content, colorid, cb) {
+      api.insertEvent(calendarid, timeType, start, end, title, content, colorid, (req) => {
         if (req) {
           this.addEvent([req], { background: '#FFFFFF' })
           cb(req)

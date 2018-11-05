@@ -49,15 +49,18 @@
           </table>
         </transition>
       </div>
-      <br>
-      표시되는 시간의 텍스트 크기를 변경합니다. (css style) &nbsp; 
-      <input type="text" class="uk-input uk-width-1-6" :value="setting.timerStyle.size || 'wait'" @input="updateSize">
-      <br>
-      표시되는 시간의 텍스트 굵기를 변경합니다. (css style) &nbsp; 
-      <input type="text" class="uk-input uk-width-1-6" :value="setting.timerStyle.weight || 'wait'" @input="updateWeight">
-      <br>
-      표시되는 시간의 텍스트 색을 변경합니다. (css style) &nbsp; 
-      <input type="text" class="uk-input uk-width-1-6" :value="setting.timerStyle.color || 'wait'" @input="updateColor">
+      <p>
+        표시되는 시간의 텍스트 크기를 변경합니다. (css style) &nbsp; 
+        <input type="text" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.size || 'wait'" @input="updateSize">
+      </p>
+      <p>
+        표시되는 시간의 텍스트 굵기를 변경합니다. (css style) &nbsp; 
+        <input type="text" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.weight || 'wait'" @input="updateWeight">
+      </p>
+      <p>
+        표시되는 시간의 텍스트 색을 변경합니다. (css style) &nbsp; 
+        <input type="text" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.color || 'wait'" @input="updateColor">
+      </p>      
      
     </span>
   </div>

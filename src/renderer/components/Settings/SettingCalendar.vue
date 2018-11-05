@@ -2,6 +2,12 @@
   <div class="uk-padding-large uk-padding-remove-top">
     <h2>Calendar 설정</h2>
     <span class="uk-text-muted">
+      달력 높이 (0~1)
+      <input type="text" v-model="setting.calendarHeight" class="uk-input uk-form-small uk-width-1-6" @input="changeHeight">
+      <p>
+        <input type="radio" v-model="setting.calendarType" class="uk-radio" name="calendarType" value="week" @change="changeView"> 3주 보기 <br>
+        <input type="radio" v-model="setting.calendarType" class="uk-radio" name="calendarType" value="month" @change="changeView"> 한달 보기
+      </p>
       <p>
         <table>
           <tr class="uk-text-center">
@@ -83,7 +89,6 @@ export default {
     saveCalendar () {
       fs.writeFile(this.appdata + '/calendar.json', JSON.stringify(this.calendarList), (err) => {
         if (err) console.error(err)
-        // console.log('calendar save success')
         this.parents.webContents.reload()
       })
     },
@@ -108,6 +113,12 @@ export default {
       // console.log(type)
       this.setting.calendar.buttonType = type
       this.save('calendar', this.setting.calendar)
+    },
+    changeView (e) {
+      this.save('calendarType', e.target.value)
+    },
+    changeHeight (e) {
+      this.save('calendarHeight', e.target.value)
     }
   },
   props: ['setting', 'parents']

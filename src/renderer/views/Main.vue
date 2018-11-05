@@ -16,6 +16,8 @@ export default {
     calendar
   },
   mounted () {
+    this.setIgnore()
+    this.disableIgnore()
     ipcRenderer.on('setOption', (event, message) => {
       // console.log('set Options')
       this.$store.commit('setOptions', message)

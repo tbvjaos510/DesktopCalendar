@@ -14,6 +14,12 @@
       <vk-drop mode='click' ref="eventAddDrop">
         <vk-card padding='small' class='event-add' @mouseover="setIgnore" @mouseout="disableIgnore">
           <fieldset class='uk-fieldset'>
+            달력
+            <select v-model="calendarid" v-if="calendarids" class="uk-select uk-form-small">
+              <option v-for="(data) in calendarids" v-if="data.accessRole == 'owner' || data.accessRole == 'writer'" :value="data.id">
+                {{ data.summary }}
+              </option>
+            </select>
             제목
             <input type='text' placeholder='제목 입력' class='uk-input' v-model='summary'>
             <p class='uk-margin-small-top'>
@@ -62,6 +68,7 @@
 <script>
 import { moment } from 'fullcalendar'
 import events from './GoogleApi/event'
+import fs from 'fs'
 const Showdown = require('showdown')
 const remote = require('electron').remote
 const { BrowserWindow } = remote
@@ -79,6 +86,7 @@ export default {
       showAdd: false,
       summary: '',
       description: '',
+      calendarid: '',
       startTime: null,
       endTime: '',
       colorid: 1,
@@ -128,7 +136,8 @@ export default {
           'background': '#dc2127',
           'foreground': '#1d1d1d'
         }
-      ]
+      ],
+      calendarids: null
     }
   },
   methods: {
@@ -153,7 +162,6 @@ export default {
         webPreferences: { webSecurity: false }
       })
       settingWindow.setSkipTaskbar(false)
-      settingWindow.setIgnoreMouseEvents(false)
       settingWindow.setMenu(null)
       if (this.DevMode()) {
         settingWindow.webContents.openDevTools({
@@ -163,6 +171,8 @@ export default {
       settingWindow.loadURL(mainPath)
       settingWindow.webContents.once('did-finish-load', () => {
         settingWindow.webContents.send('init-options', (this.$store.getters.getAll))
+        settingWindow.setIgnoreMouseEvents(false)
+        settingWindow.focus()
       })
       settingWindow.on('close', (e) => {
         $('#createOption').prop('disabled', false)
@@ -172,8 +182,7 @@ export default {
     insertEvent (e) {
       this.$refs.eventAddDrop.hide()
       let resultHtml = converter.makeHtml(this.description)
-      // console.log(resultHtml)
-      this.$refs.eventform.insertEvent(this.timeType === '날짜', this.startTime, this.endTime, this.summary, resultHtml, this.colorid + 1, (e) => {
+      this.$refs.eventform.insertEvent(this.calendarid, this.timeType === '날짜', this.startTime, this.endTime, this.summary, resultHtml, this.colorid + 1, (e) => {
         if (e) console.log(e)
       })
       this.startTime = this.endTime = this.summary = this.description = ''
@@ -205,11 +214,21 @@ export default {
           e.currentTarget.appendChild(plusbtn)
         }
       })
+    },
+    calendarList () {
+      fs.readFile(this.appdata + '/calendar.json', (err, res) => {
+        if (err) return console.error(err)
+        res = JSON.parse(res)
+        this.calendarids = res
+        res.forEach((value) => {
+          if (value.primary) this.calendarid = value.id
+        })
+      })
     }
   },
   mounted () {
     $('#calendar').fullCalendar({
-      defaultView: 'week',
+      defaultView: this.$store.getters.getOptions('calendarType'),
       header: {
         left: '',
         center: 'title',
@@ -217,7 +236,7 @@ export default {
       },
       themeSystem: 'bootstrap4',
       locale: 'ko',
-      height: window.outerHeight * 0.7,
+      height: window.outerHeight * this.getCalendarHeight,
       eventLimit: true,
       views: {
         week: {
@@ -266,6 +285,12 @@ export default {
   computed: {
     getCalendarOption () {
       return this.$store.getters.getOptions('calendar')
+    },
+    getCalendarType () {
+      return this.$store.getters.getOptions('calendarType')
+    },
+    getCalendarHeight () {
+      return this.$store.getters.getOptions('calendarHeight')
     }
   },
   components: {
@@ -278,6 +303,12 @@ export default {
     getCalendarOption (newval, old) {
       $('#calendar, .fc-center>h2').css('color', this.convertRGBA(newval.color.rgba || newval.color))
       $('#calendar').css('background-color', this.convertRGBA(newval.background.rgba || newval.background))
+    },
+    getCalendarType (newval, old) {
+      $('#calendar').fullCalendar('changeView', newval)
+    },
+    getCalendarHeight (newval, old) {
+      $('#calendar').fullCalendar('option', 'height', window.outerHeight * newval)
     }
   }
 }
@@ -346,8 +377,5 @@ $side-margin: 20%;
 .fc-bgevent,
 .fc-event-container{
     pointer-events:auto; /*events*/
-}
-#event-plus-btn {
-  
 }
 </style>

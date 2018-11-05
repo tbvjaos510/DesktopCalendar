@@ -48,6 +48,7 @@ export default {
       }
     },
     restartApp () {
+      localStorage.clear()
       fs.unlink(this.appdata + '/calendar.json', (e) => {
         if (e) console.log(e)
         fs.unlink(this.appdata + '/token.json', (e) => {

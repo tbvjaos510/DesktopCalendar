@@ -41,6 +41,10 @@ function createWindow () {
     console.log('blured')
     mainWindow.setIgnoreMouseEvents(true, { forward: true })
   })
+  mainWindow.on('close', (e) => {
+    e.preventDefault()
+    e.returnValue = false
+  })
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -82,7 +86,7 @@ function openTray () {
       type: 'normal',
       click: () => {
         tray.destroy()
-        mainWindow.close()
+        mainWindow.destroy()
       }
     },
     {

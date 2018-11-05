@@ -7,11 +7,11 @@
       <thead>
         <tr>
           <th class="uk-text-center">
-            <input type="radio" class="uk-radio" name="Design" id="blackdesign" checked @click="setBlack">
+            <input type="radio" class="uk-radio" name="Designs" id="blackdesign" checked @click="setBlack">
             <label for="blackdesign">Black</label>
           </th>
           <th class="uk-text-center">
-            <input type="radio" class="uk-radio" name="Design" id="whitedesign" @click="setWhite">
+            <input type="radio" class="uk-radio" name="Designs" id="whitedesign" @click="setWhite">
             <label for="whitedesign">White</label>
           </th>
         </tr>
@@ -60,8 +60,13 @@ export default {
             a: 1
           },
           buttonType: 'secondary'
-        }
+        },
+        calendarType: 'week',
+        calendarHeight: '0.7',
+        refreshTime: 600
       })
+      console.log('setblack')
+      return true
     },
     setWhite () {
       this.$store.commit('setAll', {
@@ -85,8 +90,13 @@ export default {
             a: 1
           },
           buttonType: 'primary'
-        }
+        },
+        calendarType: 'week',
+        calendarHeight: '0.7',
+        refreshTime: 600
       })
+      console.log('setwhite')
+      return true
     }
   },
   computed: {

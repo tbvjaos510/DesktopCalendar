@@ -34,7 +34,6 @@ var win = require('electron').remote.getCurrentWindow()
 
 const enableMouse = function (e) {
   win.setIgnoreMouseEvents(false)
-  console.log('enable')
 }
 const disableMouse = function (e) {
   if (e) {
@@ -42,7 +41,6 @@ const disableMouse = function (e) {
     if ((e.clientX > pos.left && e.clientY > pos.top) && (e.clientX < pos.left + pos.width && e.clientY < pos.top + pos.height)) return true
   }
   win.setIgnoreMouseEvents(true, { forward: true })
-  console.log('disable')
 }
 Vue.use(Vuikit)
 Vue.use(VuikitIcons)
@@ -57,7 +55,6 @@ Vue.DevMode = Vue.prototype.DevMode = () => process.env.NODE_ENV === 'developmen
 Vue.setIgnore = Vue.prototype.setIgnore = enableMouse
 Vue.disableIgnore = Vue.prototype.disableIgnore = disableMouse
 Vue.appdata = Vue.prototype.appdata = process.env.LOCALAPPDATA + '/DesktopCalendar'
-enableMouse()
 /* eslint-disable no-new */
 new Vue({
   components: {

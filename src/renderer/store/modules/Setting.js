@@ -22,6 +22,8 @@ export default {
         },
         buttonType: 'primary'
       },
+      calendarType: 'week',
+      calendarHeight: '0.7',
       refreshTime: 600
     }
   },

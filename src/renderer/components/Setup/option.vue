@@ -16,7 +16,7 @@
         <option value="10800">3시간</option>
       </select>
     </p>
-    <vk-button class="uk-position-medium uk-position-top-right" type="primary" size="small" uk-slideshow-item="4">다음</vk-button>
+    <vk-button class="uk-position-medium uk-position-top-right" type="primary" size="small" uk-slideshow-item="5">다음</vk-button>
   </div>
 </template>
 

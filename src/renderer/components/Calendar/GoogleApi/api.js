@@ -118,7 +118,7 @@ export default {
         cb(null)
       })
   },
-  insertEvent (timeType, start, end, title, content, colorid, cb) {
+  insertEvent (calendarid, timeType, start, end, title, content, colorid, cb) {
     let sendObject = {
       summary: title,
       description: content,
@@ -139,7 +139,7 @@ export default {
         date: end.split('T')[0]
       }
     }
-    axios.post(`https://www.googleapis.com/calendar/v3/calendars/primary/events`, sendObject)
+    axios.post(`https://www.googleapis.com/calendar/v3/calendars/${calendarid}/events`, sendObject)
       .then((req) => {
         // console.log(req)
         cb(req.data)
