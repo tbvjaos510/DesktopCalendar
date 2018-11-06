@@ -33,6 +33,7 @@ Settings.defaultLocale = 'ko'
 var win = require('electron').remote.getCurrentWindow()
 
 const enableMouse = function (e) {
+  console.log('ignore')
   win.setIgnoreMouseEvents(false)
 }
 const disableMouse = function (e) {
@@ -40,6 +41,7 @@ const disableMouse = function (e) {
     const pos = e.currentTarget.getBoundingClientRect()
     if ((e.clientX > pos.left && e.clientY > pos.top) && (e.clientX < pos.left + pos.width && e.clientY < pos.top + pos.height)) return true
   }
+  console.log('disignore')
   win.setIgnoreMouseEvents(true, { forward: true })
 }
 Vue.use(Vuikit)

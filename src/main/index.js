@@ -3,6 +3,7 @@
 import electron, { Menu } from 'electron'
 import fs from 'fs'
 import path from 'path'
+import { SetBottomMost } from 'electron-bottom-most'
 const { app, BrowserWindow, Tray, Notification, ipcMain } = electron
 // Set Path to Exe
 process.chdir(path.dirname(process.execPath))
@@ -48,6 +49,7 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  console.log(SetBottomMost(mainWindow.getNativeWindowHandle()))
 }
 function setupWindow () {
   fs.stat(process.env.LOCALAPPDATA + '/DesktopCalendar/calendar.json', (err, stat) => {
