@@ -3134,6 +3134,13 @@ electron-devtools-installer@^2.2.4:
     rimraf "^2.5.2"
     semver "^5.3.0"
 
+electron-disable-minimize@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/electron-disable-minimize/-/electron-disable-minimize-1.0.0.tgz#6bb7cf452377e0add7530c63518129ed9d0b74be"
+  dependencies:
+    nan "^2.8.0"
+    node-gyp "^3.6.2"
+
 electron-download@^3.0.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/electron-download/-/electron-download-3.3.0.tgz#2cfd54d6966c019c4d49ad65fbe65cc9cdef68c8"

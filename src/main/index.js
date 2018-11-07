@@ -3,7 +3,8 @@
 import electron, { Menu } from 'electron'
 import fs from 'fs'
 import path from 'path'
-import { SetBottomMost } from 'electron-bottom-most'
+// import { SetBottomMost } from 'electron-bottom-most'
+import { DisableMinimize } from 'electron-disable-minimize'
 const { app, BrowserWindow, Tray, Notification, ipcMain } = electron
 // Set Path to Exe
 process.chdir(path.dirname(process.execPath))
@@ -49,7 +50,7 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-  console.log(SetBottomMost(mainWindow.getNativeWindowHandle()))
+  if (process.platform === 'win32') console.log(DisableMinimize(mainWindow.getNativeWindowHandle()))
 }
 function setupWindow () {
   fs.stat(process.env.LOCALAPPDATA + '/DesktopCalendar/calendar.json', (err, stat) => {
@@ -73,8 +74,8 @@ function setupWindow () {
     }
   })
 }
-console.log(app.makeSingleInstance(() => {
-}))
+app.makeSingleInstance(() => {
+})
 ipcMain.on('settingend', () => {
   createWindow()
   startWindow.destroy()
