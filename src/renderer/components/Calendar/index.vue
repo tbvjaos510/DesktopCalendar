@@ -380,7 +380,7 @@ $side-margin: 20%;
 .fc-event-container{
     pointer-events:auto; /*events*/
 }
-.fc-center {
+.fc-center, .fc-day-header > span, .fc-day-number, #reload-btn{
   user-select: none;
 }
 </style>
