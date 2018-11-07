@@ -2,13 +2,19 @@
   <vk-sticky>
     <vk-card class="setting-header" type="default" padding="small">
       <img src="static/icon.png" alt="Desktop Calendar" id="main-icon">
-      <span class="uk-h3">Desktop Calendar 설정</span> 
+      <span class="uk-h3">Desktop Calendar 설정 <span class="uk-h4">{{ currentVersion }}</span></span> 
     </vk-card>
   </vk-sticky>
 </template>
 
 <script>
+import { remote } from 'electron'
 export default {
+  data () {
+    return {
+      currentVersion: remote.app.getVersion()
+    }
+  },
   name: 'setting-header'
 }
 </script>
