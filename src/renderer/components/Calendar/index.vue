@@ -237,7 +237,7 @@ export default {
       themeSystem: 'bootstrap4',
       locale: 'ko',
       height: window.outerHeight * this.getCalendarHeight,
-      eventLimit: true,
+      eventLimit: false,
       views: {
         week: {
           type: 'basic',
@@ -375,7 +375,6 @@ $side-margin: 20%;
 .fc-bgevent-skeleton /*events container*/{
     pointer-events:none
 }
-
 /*Turn pointer events back on*/
 .fc-bgevent,
 .fc-event-container{
@@ -383,5 +382,8 @@ $side-margin: 20%;
 }
 .fc-center, .fc-day-header > span, .fc-day-number, #reload-btn{
   user-select: none;
+}
+.fc-scroller {
+   overflow-y: visible !important;
 }
 </style>

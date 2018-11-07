@@ -9,6 +9,7 @@
 import Timer from '../components/Status/Timer'
 import calendar from '../components/Calendar'
 import {ipcRenderer} from 'electron'
+// import $ from 'jquery'
 export default {
   name: 'Main-page',
   components: {
@@ -22,8 +23,6 @@ export default {
       // console.log('set Options')
       this.$store.commit('setOptions', message)
     })
-    // $(document).on('mouseenter', 'button, a, textarea, .uk-input, .gcal-body, .event-add, .timeShow, .color-input', window.enableMouse)
-    // $(document).on('mouseleave', 'button, a, textarea, .uk-input, .gcal-body, .event-add, .timeShow, .color-input', window.disableMouse)
   }
 }
 </script>
