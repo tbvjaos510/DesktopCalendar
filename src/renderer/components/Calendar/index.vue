@@ -308,6 +308,7 @@ export default {
     },
     getCalendarType (newval, old) {
       $('#calendar').fullCalendar('changeView', newval)
+      this.$bus.$emit('forceReload')
     },
     getCalendarHeight (newval, old) {
       $('#calendar').fullCalendar('option', 'height', window.outerHeight * newval)

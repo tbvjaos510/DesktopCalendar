@@ -50,16 +50,49 @@
         </transition>
       </div>
       <p>
-        표시되는 시간의 텍스트 크기를 변경합니다. (css style) &nbsp; 
-        <input type="text" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.size || 'wait'" @input="updateSize">
+        고급 스타일 설정 <input type="checkbox" class="uk-checkbox" v-model="expertMode">
       </p>
       <p>
-        표시되는 시간의 텍스트 굵기를 변경합니다. (css style) &nbsp; 
-        <input type="text" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.weight || 'wait'" @input="updateWeight">
+        표시되는 시간의 텍스트 크기를 변경합니다. <span v-if="expertMode">(css style)</span>&nbsp; 
+        <input type="text" v-if="expertMode" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.size" @input="updateSize">
+        <select v-else :value="setting.timerStyle.size" @change="updateSize" class="uk-select uk-width-1-6 uk-form-small">
+          <option>0%</option>
+          <option>50%</option>
+          <option>100%</option>
+          <option>200%</option>
+          <option>300%</option>
+          <option>400%</option>
+          <option>500%</option>
+          <option value="6em">600%</option>
+        </select>
       </p>
       <p>
-        표시되는 시간의 텍스트 색을 변경합니다. (css style) &nbsp; 
-        <input type="text" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.color || 'wait'" @input="updateColor">
+        표시되는 시간의 텍스트 굵기를 변경합니다. <span v-if="expertMode">(css style)</span>&nbsp; 
+        <input type="text" v-if="expertMode" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.weight" @input="updateWeight">
+        <select v-else :value="setting.timerStyle.weight" @change="updateWeight" class="uk-select uk-width-1-6 uk-form-small">
+          <option>100</option>
+          <option>200</option>
+          <option>300</option>
+          <option>400</option>
+          <option>500</option>
+          <option>600</option>
+          <option>700</option>
+          <option>800</option>
+        </select>
+      </p>
+      <p>
+        표시되는 시간의 텍스트 색을 변경합니다. <span v-if="expertMode">(css style)</span>&nbsp; 
+        <input type="text"  v-if="expertMode" class="uk-input uk-width-1-6 uk-form-small" :value="setting.timerStyle.color" @input="updateColor">
+        <select v-else :value="setting.timerStyle.color" @change="updateColor" class="uk-select uk-width-1-6 uk-form-small">
+          <option>black</option>
+          <option>white</option>
+          <option>red</option>
+          <option>green</option>
+          <option>blue</option>
+          <option>lightblue</option>
+          <option>aqua</option>
+          <option>brown</option>
+        </select>
       </p>      
      
     </span>
@@ -77,7 +110,8 @@ export default {
     return {
       exampleTime: new Date(),
       exampleMoment: null,
-      showHelp: false
+      showHelp: false,
+      expertMode: false
     }
   },
   methods: {
