@@ -3,7 +3,8 @@
     <h2>Calendar 설정</h2>
     <span class="uk-text-muted">
       달력 높이 (0~1)
-      <input type="text" v-model="setting.calendarHeight" class="uk-input uk-form-small uk-width-1-6" @input="changeHeight">
+      <input class="uk-range uk-width-1-2" type="range" v-model="setting.calendarHeight" min="0" max="1" step="0.01" @input="changeHeight">
+      <!-- <input type="text" v-model="setting.calendarHeight" class="uk-input uk-form-small uk-width-1-6" @input="changeHeight"> -->
       <p>
         <input type="radio" v-model="setting.calendarType" class="uk-radio" name="calendarType" value="week" @change="changeView"> 3주 보기 <br>
         <input type="radio" v-model="setting.calendarType" class="uk-radio" name="calendarType" value="month" @change="changeView"> 한달 보기
