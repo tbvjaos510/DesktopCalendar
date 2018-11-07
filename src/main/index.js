@@ -73,6 +73,8 @@ function setupWindow () {
     }
   })
 }
+console.log(app.makeSingleInstance(() => {
+}))
 ipcMain.on('settingend', () => {
   createWindow()
   startWindow.destroy()
@@ -124,6 +126,18 @@ function openTray () {
     body: 'Desktop Calendar가 실행 중입니다. 트레이 아이콘에서 볼 수 있습니다.'
   })
   notify.show()
+}
+
+var iShouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.show()
+    mainWindow.focus()
+  }
+  return true
+})
+if (iShouldQuit) {
+  app.quit()
 }
 app.on('ready', setupWindow)
 
