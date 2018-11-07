@@ -380,4 +380,7 @@ $side-margin: 20%;
 .fc-event-container{
     pointer-events:auto; /*events*/
 }
+.fc-center {
+  user-select: none;
+}
 </style>

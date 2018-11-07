@@ -1,5 +1,5 @@
 <template>
-  <h1 class="uk-text-center uk-margin-large-top" :style="{ 'font-size': timeStyle.size, 'font-weight':  timeStyle.weight, 'color': timeStyle.color }">{{ datenow }}</h1>
+  <h1 class="uk-text-center uk-margin-large-top" :style="{ 'font-size': timeStyle.size, 'font-weight':  timeStyle.weight, 'color': timeStyle.color }" style="user-select:none">{{ datenow }}</h1>
 </template>
 
 <script>
