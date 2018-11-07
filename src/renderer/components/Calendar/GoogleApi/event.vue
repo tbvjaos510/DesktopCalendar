@@ -88,11 +88,6 @@ export default {
                 this.addEvent(events.data.items, colors[cal.id])
               })
             }
-            // catch end
-            this.$bus.$once('forceReload', () => {
-              // console.log('init start')
-              this.init()
-            })
             this.$bus.emit('reloadEnd')
           })
         })
@@ -145,6 +140,9 @@ export default {
       this.openExternal(url)
     })
     this.refreshInterval = setInterval(this.init, this.getRefresh * 1000)
+    this.$bus.$on('forceReload', () => {
+      this.init()
+    })
   },
   computed: {
     getDescription () {
