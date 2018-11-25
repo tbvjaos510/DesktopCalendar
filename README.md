@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/tbvjaos510/DesktopCalendar.svg?branch=master)](https://travis-ci.org/tbvjaos510/DesktopCalendar)
 [![Build status](https://ci.appveyor.com/api/projects/status/l6kk9bgc2a2helch?svg=true)](https://ci.appveyor.com/project/tbvjaos510/desktopcalendar)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![GitHub Releases](https://img.shields.io/github/downloads/tbvjaos510/DesktopCalendar/latest/total.svg)](https://github.com/tbvjaos510/DesktopCalendar/releases)
+
 
 # desktop-calendar
 
