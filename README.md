@@ -1,13 +1,15 @@
 [![Build Status](https://travis-ci.org/tbvjaos510/DesktopCalendar.svg?branch=master)](https://travis-ci.org/tbvjaos510/DesktopCalendar)
 [![Build status](https://ci.appveyor.com/api/projects/status/l6kk9bgc2a2helch?svg=true)](https://ci.appveyor.com/project/tbvjaos510/desktopcalendar)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![GitHub Releases](https://img.shields.io/github/downloads/tbvjaos510/DesktopCalendar/latest/total.svg)](https://github.com/tbvjaos510/DesktopCalendar/releases)
+
 
 # Desktop-Calendar
 
 > electron-vue(vuikit)으로 제작한 desktop calendar
 
 ## Library
-* [Electron-vue](https://github.com/SimulatedGREG/electron-vue)
+* [Electron-Vue](https://github.com/SimulatedGREG/electron-vue)
 * [Electron-Builder](https://github.com/electron-userland/electron-builder)
 * [Vuex](https://github.com/vuejs/vuex)
 * [Vuikit](https://vuikit.js.org/)[(UIkit)](https://getuikit.com/)
@@ -15,8 +17,8 @@
 * [FullCalendar](https://fullcalendar.io/docs)
 
 ## Build Status
-* [Travis](https://travis-ci.org/)
-* [Appveyer](https://www.appveyor.com/)
+* [Travis CI](https://travis-ci.org/)
+* [Appveyor](https://www.appveyor.com/)
 
 # Intro
 ## Windows
