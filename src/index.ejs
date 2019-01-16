@@ -21,6 +21,8 @@
     <div id="app"></div>
     <!-- Set `__static` path to static files in production -->
     <script>
+      document.addEventListener('dragover', event => event.preventDefault());
+      document.addEventListener('drop', event => event.preventDefault());
       if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
     </script>
 

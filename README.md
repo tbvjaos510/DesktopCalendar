@@ -2,7 +2,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/l6kk9bgc2a2helch?svg=true)](https://ci.appveyor.com/project/tbvjaos510/desktopcalendar)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-# desktop-calendar
+# Desktop-Calendar
 
 > electron-vue(vuikit)으로 제작한 desktop calendar
 
@@ -22,6 +22,7 @@
 ## Windows
 <img src="intro/calendar.png" />
 <img src="intro/calendar2.png" />
+<img src="intro/calendar3.png" />
 
 ## mac
 <img src="intro/calendar-mac.png"/>

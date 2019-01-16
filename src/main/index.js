@@ -3,6 +3,7 @@
 import electron, { Menu } from 'electron'
 import fs from 'fs'
 import path from 'path'
+import { autoUpdater } from 'electron-updater'
 // import { SetBottomMost } from 'electron-bottom-most'
 import { DisableMinimize } from 'electron-disable-minimize'
 const { app, BrowserWindow, Tray, Notification, ipcMain } = electron
@@ -164,15 +165,16 @@ app.on('window-all-closed', () => {
  * support auto updating. Code Signing with a valid certificate is required.
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
+autoUpdater.on('update-downloaded', (e) => {
+  new Notification({
+    title: 'Desktop Calendar 업데이트 설치 완료',
+    body: e.releaseName + '\n5초후에 설치합니다.'
+  }).show()
+  setTimeout(() => {
+    autoUpdater.quitAndInstall()
+  }, 5000)
 })
 
 app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
- */
