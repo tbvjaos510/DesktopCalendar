@@ -8,7 +8,11 @@
 
 > electron-vue(vuikit)으로 제작한 desktop calendar
 
-## Library
+해당 프로젝트에서 사용한 바탕화면에 고정하는 기술은 직접 구현하였습니다.
+
+[electron-disable-minimize](https://github.com/tbvjaos510/electron-disable-minimize) 프로젝트를 참고해 주세요.
+
+## Stacks
 * [Electron-Vue](https://github.com/SimulatedGREG/electron-vue)
 * [Electron-Builder](https://github.com/electron-userland/electron-builder)
 * [Vuex](https://github.com/vuejs/vuex)
@@ -16,11 +20,7 @@
 * [Google Calendar API](https://developers.google.com/calendar/)
 * [FullCalendar](https://fullcalendar.io/docs)
 
-## Build Status
-* [Travis CI](https://travis-ci.org/)
-* [Appveyor](https://www.appveyor.com/)
-
-# Intro
+# Program Images
 ## Windows
 <img src="intro/calendar.png" />
 <img src="intro/calendar2.png" />
