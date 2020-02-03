@@ -1,0 +1,12 @@
+{
+  "eslint.validate": ["vue", "javascript", "html"],
+  "eslint.alwaysShowStatus": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.enable": true,
+  "vetur.format.enable": false,
+  "prettier.disableLanguages": ["javascript", "vue"],
+  "typescriptHero.imports.organizeOnSave": false
+}
