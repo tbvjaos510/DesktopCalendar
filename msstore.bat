@@ -1,1 +1,0 @@
-electron-windows-store --input-directory "build/win-unpacked/" --output-directory WinApps/ --package-version 1.3.0.0 --package-name DeskCal --publisher-display-name º≠ªÛ»Ò --publisher "CN=8FE6663A-2915-41CC-B9BE-BC4D2CF86FF2" 

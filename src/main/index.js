@@ -19,11 +19,11 @@ if (process.env.NODE_ENV !== 'development') {
 let mainWindow, startWindow
 let tray = null
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
+  ? 'http://localhost:9080'
   : `file://${__dirname}/index.html`
 
 const setupURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/#/setup`
+  ? 'http://localhost:9080/#/setup'
   : `file://${__dirname}/index.html#setup`
 
 function createWindow () {
@@ -123,7 +123,7 @@ function openTray () {
       })
   }
   tray.setContextMenu(Menu.buildFromTemplate(contextMenu))
-  let notify = new Notification({
+  const notify = new Notification({
     title: 'Desktop Calendar 실행 중',
     body: 'Desktop Calendar가 실행 중입니다. 트레이 아이콘에서 볼 수 있습니다.'
   })
