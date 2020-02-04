@@ -1,6 +1,12 @@
 {
-    "editor.tabSize": 2,
-    "files.associations": {
-        "iostream": "cpp"
-    }
+  "eslint.validate": ["vue", "javascript", "html"],
+  "eslint.alwaysShowStatus": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.enable": true,
+  "vetur.format.enable": false,
+  "prettier.disableLanguages": ["javascript", "vue"],
+  "typescriptHero.imports.organizeOnSave": false
 }
