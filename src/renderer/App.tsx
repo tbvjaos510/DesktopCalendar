@@ -5,7 +5,7 @@ const mainElement = document.createElement("div");
 document.body.appendChild(mainElement);
 
 const App = () => {
-  return <h1>Hi from a react app2</h1>;
+  return <h1>Hi from a react app232</h1>;
 };
 
 ReactDom.render(<App />, mainElement);
