@@ -73,7 +73,7 @@
     "fullcalendar": "^3.9.0",
     "googleapis": "27",
     "jquery": "^3.3.1",
-    "luxon": "^1.4.4",
+    "luxon": "^2.5.2",
     "material-design-icons-iconfont": "^3.0.3",
     "showdown": "^1.8.7",
     "standard": "^12.0.1",
